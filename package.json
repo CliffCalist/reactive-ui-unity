@@ -1,0 +1,11 @@
+{
+    "name": "com.white-arrow.mvvvm-ui",
+    "version": "1.0.0",
+    "displayName": "MVVM-UI",
+    "description": "MVVM architecture framework for your Unity game’s UI.",
+    "licensesUrl": "https://github.com/CliffCalist/MVVM-UI/blob/8317ba043ea61800d72c220ff19493d18f2b10c7/LICENSE",
+    "author": {
+        "name": "White Arrow",
+        "email": "cliffstersprog@gmail.com"
+    }
+}
