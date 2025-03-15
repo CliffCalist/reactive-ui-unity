@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace WhiteArrow.MVVM.UI
 {
-    public abstract class UiView : MonoBehaviour
+    public abstract class UIView : MonoBehaviour
     {
         [SerializeField] Animations _animations;
         [SerializeField] private Button _btnHide;
@@ -19,11 +19,11 @@ namespace WhiteArrow.MVVM.UI
         public ReadOnlyReactiveProperty<bool> IsShowed => _isShowed;
 
 
-        private readonly ReactiveProperty<UiViewShowState> _showState = new();
-        public ReadOnlyReactiveProperty<UiViewShowState> ShowState => _showState;
+        private readonly ReactiveProperty<UIViewShowState> _showState = new();
+        public ReadOnlyReactiveProperty<UIViewShowState> ShowState => _showState;
 
-        private readonly ReactiveProperty<UiViewHideState> _hideState = new();
-        public ReadOnlyReactiveProperty<UiViewHideState> HideState => _hideState;
+        private readonly ReactiveProperty<UIViewHideState> _hideState = new();
+        public ReadOnlyReactiveProperty<UIViewHideState> HideState => _hideState;
 
 
 
@@ -35,10 +35,10 @@ namespace WhiteArrow.MVVM.UI
         protected void InitIfFalse()
         {
             if (!IsIniialized)
-                Init();
+                InitInternal();
         }
 
-        private void Init()
+        private void InitInternal()
         {
             if (IsIniialized)
                 return;
@@ -49,7 +49,7 @@ namespace WhiteArrow.MVVM.UI
             _animations.Initialize(this);
             if (_animations.IsEnabled)
             {
-                _animations.OnShowEnded.Subscribe(_ => _showState.Value = UiViewShowState.AnimationEnded).AddTo(this);
+                _animations.OnShowEnded.Subscribe(_ => _showState.Value = UIViewShowState.AnimationEnded).AddTo(this);
                 _animations.OnHideEnded.Subscribe(_ => _object.SetActive(false)).AddTo(this);
             }
 
@@ -62,11 +62,11 @@ namespace WhiteArrow.MVVM.UI
             }
 
 
-            OnInit();
+            Init();
             IsIniialized = true;
         }
 
-        protected virtual void OnInit() { }
+        protected virtual void Init() { }
 
 
 
@@ -93,7 +93,7 @@ namespace WhiteArrow.MVVM.UI
                 return false;
             }
 
-            _showState.Value = UiViewShowState.Requested;
+            _showState.Value = UIViewShowState.Requested;
             _object.SetActive(true);
             return true;
         }
@@ -104,19 +104,19 @@ namespace WhiteArrow.MVVM.UI
             Rebind();
 
             // Because, hide states are ended, and show states are started
-            _hideState.Value = UiViewHideState.None;
+            _hideState.Value = UIViewHideState.None;
 
             _isShowed.Value = true;
-            _showState.Value = UiViewShowState.Showed;
+            _showState.Value = UIViewShowState.Showed;
 
             if (_animations.IsEnabled)
                 _animations.PlayShow();
-            else _showState.Value = UiViewShowState.AnimationEnded; // Because, animations is disabled
+            else _showState.Value = UIViewShowState.AnimationEnded; // Because, animations is disabled
 
-            OnEnabled();
+            OnShowed();
         }
 
-        protected virtual void OnEnabled() { }
+        protected virtual void OnShowed() { }
 
 
 
@@ -129,7 +129,7 @@ namespace WhiteArrow.MVVM.UI
                 return false;
             }
 
-            _hideState.Value = UiViewHideState.Requested;
+            _hideState.Value = UIViewHideState.Requested;
             if (_animations.IsEnabled)
                 _animations.PlayHide();
             else _object.SetActive(false);
@@ -142,14 +142,14 @@ namespace WhiteArrow.MVVM.UI
             InitIfFalse();
 
             // Because, show states are ended, and hide states are started
-            _showState.Value = UiViewShowState.None;
+            _showState.Value = UIViewShowState.None;
 
             _isShowed.Value = false;
-            _hideState.Value = UiViewHideState.Hided;
+            _hideState.Value = UIViewHideState.Hided;
             DisposeBinding();
-            OnDisabled();
+            OnHided();
         }
 
-        protected virtual void OnDisabled() { }
+        protected virtual void OnHided() { }
     }
 }

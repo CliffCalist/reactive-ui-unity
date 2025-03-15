@@ -5,8 +5,8 @@ namespace WhiteArrow.MVVM.UI
 {
     public class ObservableViewAnimatorTrigger : ObservableTriggerBase
     {
-        private readonly Subject<Unit> _onshowEnded = new();
-        public Observable<Unit> OnShowEnded => _onshowEnded;
+        private readonly Subject<Unit> _onShowEnded = new();
+        public Observable<Unit> OnShowEnded => _onShowEnded;
 
         private readonly Subject<Unit> _onHideEnded = new();
         public Observable<Unit> OnHideEnded => _onHideEnded;
@@ -14,7 +14,7 @@ namespace WhiteArrow.MVVM.UI
 
         public void OnAnimationShowEnded()
         {
-            _onshowEnded.OnNext(Unit.Default);
+            _onShowEnded.OnNext(Unit.Default);
         }
 
         public void OnAnimationCloseEnded()

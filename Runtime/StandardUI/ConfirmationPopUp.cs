@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace WhiteArrow.MVVM.UI
 {
-    public class ConfirmationPopUp : UiView
+    public class ConfirmationPopUp : UIView
     {
         [SerializeField] private Button _btnConfirm;
 
@@ -16,7 +16,7 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        protected override void OnInit()
+        protected override void Init()
         {
             _btnConfirm.OnClickAsObservable()
                 .Subscribe(_ => Confirm())
@@ -25,7 +25,7 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        protected override void OnEnabled()
+        protected override void OnShowed()
         {
             _isConfirmed = false;
         }
@@ -41,7 +41,7 @@ namespace WhiteArrow.MVVM.UI
             Hide();
         }
 
-        protected override void OnDisabled()
+        protected override void OnHided()
         {
             _onChoiceMade.OnNext(_isConfirmed);
         }

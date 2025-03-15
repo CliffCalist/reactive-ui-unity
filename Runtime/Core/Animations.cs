@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 using R3;
+using UnityEngine;
 
 namespace WhiteArrow.MVVM.UI
 {
@@ -25,10 +25,11 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        public void Initialize(UiView view)
+        public void Initialize(UIView view)
         {
             if (_isInitialized || !_isEnabled)
                 return;
+
             if (view is null)
                 throw new ArgumentNullException(nameof(view));
 
@@ -61,6 +62,7 @@ namespace WhiteArrow.MVVM.UI
         {
             if (LogIfNonInitialized())
                 return;
+
             _animator.Play(_showAnimationName);
         }
 
@@ -68,6 +70,7 @@ namespace WhiteArrow.MVVM.UI
         {
             if (LogIfNonInitialized())
                 return;
+
             _animator.Play(_hideAnimationName);
         }
     }
