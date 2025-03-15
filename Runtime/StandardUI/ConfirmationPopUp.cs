@@ -48,7 +48,7 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        protected override void OnRebind() { }
+        protected override void BindFromCache() { }
         protected override void DisposeBinding() { }
     }
 }

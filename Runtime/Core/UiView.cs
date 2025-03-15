@@ -73,14 +73,11 @@ namespace WhiteArrow.MVVM.UI
         protected void Rebind()
         {
             DisposeBinding();
-            OnRebind();
+            BindFromCache();
         }
 
         protected abstract void DisposeBinding();
-        protected abstract void OnRebind();
-
-
-
+        protected abstract void BindFromCache();
 
 
 
@@ -151,5 +148,12 @@ namespace WhiteArrow.MVVM.UI
         }
 
         protected virtual void OnHided() { }
+
+
+
+        private void OnDestroy()
+        {
+            DisposeBinding();
+        }
     }
 }
