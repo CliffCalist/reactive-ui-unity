@@ -38,8 +38,14 @@ namespace WhiteArrow.MVVM.UI
                 return;
 
             _isConfirmed = true;
+            OnConfirmed();
+        }
+
+        protected virtual void OnConfirmed()
+        {
             Hide();
         }
+
 
         protected override void OnHided()
         {
