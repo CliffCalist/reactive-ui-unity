@@ -5,19 +5,18 @@ using UnityEngine;
 namespace WhiteArrow.MVVM.UI
 {
     [Serializable]
-    public class Animations
+    public class AnimatorViewAniamations : IViewAnimations
     {
-        private bool _isInitialized;
-
-
         [SerializeField] private bool _isEnabled = true;
-        public bool IsEnabled => _isEnabled;
-
-        private Animator _animator;
-
         [SerializeField] private string _showAnimationName = "show";
         [SerializeField] private string _hideAnimationName = "hide";
 
+
+        private Animator _animator;
+        private bool _isInitialized;
+
+
+        public bool IsEnabled => _isEnabled;
 
         private ObservableViewAnimatorTrigger _observableAnimator;
         public Observable<Unit> OnShowEnded => _observableAnimator.OnShowEnded;
@@ -25,7 +24,7 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        public void Initialize(UIView view)
+        public void Init(UIView view)
         {
             if (_isInitialized || !_isEnabled)
                 return;
@@ -36,7 +35,7 @@ namespace WhiteArrow.MVVM.UI
 
             if (!view.TryGetComponent(out _animator))
             {
-                Debug.LogWarning($"{nameof(Animations)} in {view.name} is enabled, but {nameof(GameObject)} don't have {nameof(Animator)} component. {nameof(IsEnabled)} switched to false.", view);
+                Debug.LogWarning($"{nameof(AnimatorViewAniamations)} in {view.name} is enabled, but {nameof(GameObject)} don't have {nameof(Animator)} component. {nameof(IsEnabled)} switched to false.", view);
                 _isEnabled = false;
                 return;
             }
@@ -52,7 +51,7 @@ namespace WhiteArrow.MVVM.UI
         private bool LogIfNonInitialized()
         {
             if (!_isInitialized)
-                Debug.LogError($"The {nameof(Animations)} isn't initialized.", _animator);
+                Debug.LogError($"The {nameof(AnimatorViewAniamations)} isn't initialized.", _animator);
             return !_isInitialized;
         }
 

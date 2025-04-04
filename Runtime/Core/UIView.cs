@@ -6,14 +6,16 @@ namespace WhiteArrow.MVVM.UI
 {
     public abstract class UIView : MonoBehaviour
     {
-        [SerializeField] Animations _animations;
         [SerializeField] private Button _btnHide;
 
 
-        public bool IsIniialized { get; private set; }
-
 
         private GameObject _object;
+        private IViewAnimations _animations;
+
+
+        public bool IsInitialized { get; private set; }
+        public bool IsAnimationsEnabled => _animations != null && _animations.IsEnabled;
 
         private readonly ReactiveProperty<bool> _isShowed = new();
         public ReadOnlyReactiveProperty<bool> IsShowed => _isShowed;
@@ -27,6 +29,14 @@ namespace WhiteArrow.MVVM.UI
 
 
 
+
+        public void SetAnimations(IViewAnimations animations)
+        {
+            _animations = animations;
+            _animations.Init(this);
+        }
+
+
         private void Awake()
         {
             InitIfFalse();
@@ -34,20 +44,19 @@ namespace WhiteArrow.MVVM.UI
 
         protected void InitIfFalse()
         {
-            if (!IsIniialized)
+            if (!IsInitialized)
                 InitInternal();
         }
 
         private void InitInternal()
         {
-            if (IsIniialized)
+            if (IsInitialized)
                 return;
 
             _object = gameObject;
 
 
-            _animations.Initialize(this);
-            if (_animations.IsEnabled)
+            if (IsAnimationsEnabled)
             {
                 _animations.OnShowEnded.Subscribe(_ => _showState.Value = UIViewShowState.AnimationEnded).AddTo(this);
                 _animations.OnHideEnded.Subscribe(_ => _object.SetActive(false)).AddTo(this);
@@ -63,7 +72,7 @@ namespace WhiteArrow.MVVM.UI
 
 
             Init();
-            IsIniialized = true;
+            IsInitialized = true;
         }
 
         protected virtual void Init() { }
@@ -106,7 +115,7 @@ namespace WhiteArrow.MVVM.UI
             _isShowed.Value = true;
             _showState.Value = UIViewShowState.Showed;
 
-            if (_animations.IsEnabled)
+            if (IsAnimationsEnabled)
                 _animations.PlayShow();
             else _showState.Value = UIViewShowState.AnimationEnded; // Because, animations is disabled
 
@@ -127,7 +136,7 @@ namespace WhiteArrow.MVVM.UI
             }
 
             _hideState.Value = UIViewHideState.Requested;
-            if (_animations.IsEnabled)
+            if (IsAnimationsEnabled)
                 _animations.PlayHide();
             else _object.SetActive(false);
 
