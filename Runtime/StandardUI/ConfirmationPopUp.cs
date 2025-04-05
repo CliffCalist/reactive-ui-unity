@@ -51,10 +51,5 @@ namespace WhiteArrow.MVVM.UI
         {
             _onChoiceMade.OnNext(_isConfirmed);
         }
-
-
-
-        protected override void BindFromCache() { }
-        protected override void DisposeBinding() { }
     }
 }

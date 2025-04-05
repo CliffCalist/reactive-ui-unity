@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace WhiteArrow.MVVM.UI
 {
-    public abstract class UIView : MonoBehaviour
+    public class UIView : MonoBehaviour
     {
         [SerializeField] private Button _btnHide;
 
@@ -85,8 +85,8 @@ namespace WhiteArrow.MVVM.UI
             BindFromCache();
         }
 
-        protected abstract void DisposeBinding();
-        protected abstract void BindFromCache();
+        protected virtual void DisposeBinding() { }
+        protected virtual void BindFromCache() { }
 
 
 
