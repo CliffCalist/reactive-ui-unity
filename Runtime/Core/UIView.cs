@@ -34,6 +34,16 @@ namespace WhiteArrow.MVVM.UI
         {
             _animations = animations;
             _animations.Init(this);
+
+            _animations.OnShowEnded
+                .Where(_ => IsAnimationsEnabled)
+                .Subscribe(_ => _showState.Value = UIViewShowState.AnimationEnded)
+                .AddTo(this);
+
+            _animations.OnHideEnded
+                .Where(_ => IsAnimationsEnabled)
+                .Subscribe(_ => _object.SetActive(false))
+                .AddTo(this);
         }
 
 
@@ -54,13 +64,6 @@ namespace WhiteArrow.MVVM.UI
                 return;
 
             _object = gameObject;
-
-
-            if (IsAnimationsEnabled)
-            {
-                _animations.OnShowEnded.Subscribe(_ => _showState.Value = UIViewShowState.AnimationEnded).AddTo(this);
-                _animations.OnHideEnded.Subscribe(_ => _object.SetActive(false)).AddTo(this);
-            }
 
 
             if (_btnHide != null)
