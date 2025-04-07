@@ -56,10 +56,10 @@ namespace WhiteArrow.MVVM.UI
         protected void InitIfFalse()
         {
             if (!IsInitialized)
-                InitInternal();
+                Init();
         }
 
-        private void InitInternal()
+        private void Init()
         {
             if (IsInitialized)
                 return;
@@ -75,11 +75,11 @@ namespace WhiteArrow.MVVM.UI
             }
 
 
-            Init();
+            InitCore();
             IsInitialized = true;
         }
 
-        protected virtual void Init() { }
+        protected virtual void InitCore() { }
 
 
 

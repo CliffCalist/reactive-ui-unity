@@ -16,7 +16,7 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        protected override void Init()
+        protected override void InitCore()
         {
             _btnConfirm.OnClickAsObservable()
                 .Subscribe(_ => Confirm())

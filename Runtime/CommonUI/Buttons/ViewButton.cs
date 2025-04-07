@@ -10,7 +10,7 @@ namespace WhiteArrow.MVVM.UI
         private Button _btn;
 
 
-        protected override void Init()
+        protected override void InitCore()
         {
             var btn = GetComponent<Button>();
 
