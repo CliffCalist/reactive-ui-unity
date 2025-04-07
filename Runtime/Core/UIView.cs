@@ -47,6 +47,7 @@ namespace WhiteArrow.MVVM.UI
         }
 
 
+
         private void Awake()
         {
             InitIfFalse();
@@ -166,6 +167,9 @@ namespace WhiteArrow.MVVM.UI
         private void OnDestroy()
         {
             DisposeBinding();
+            OnDestroyCore();
         }
+
+        protected virtual void OnDestroyCore() { }
     }
 }
