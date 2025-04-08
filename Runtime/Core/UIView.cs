@@ -11,7 +11,7 @@ namespace WhiteArrow.MVVM.UI
 
 
         private GameObject _object;
-        private IViewAnimations _animations;
+        private ViewAnimations _animations;
 
 
         public bool IsInitialized { get; private set; }
@@ -30,17 +30,17 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        public void SetAnimations(IViewAnimations animations)
+        public void SetAnimations(ViewAnimations animations)
         {
             _animations = animations;
             _animations.Init(this);
 
-            _animations.OnShowEnded
+            _animations.ShowEnded
                 .Where(_ => IsAnimationsEnabled)
                 .Subscribe(_ => _showState.Value = UIViewShowState.AnimationEnded)
                 .AddTo(this);
 
-            _animations.OnHideEnded
+            _animations.HideEnded
                 .Where(_ => IsAnimationsEnabled)
                 .Subscribe(_ => _object.SetActive(false))
                 .AddTo(this);

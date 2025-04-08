@@ -5,28 +5,28 @@ namespace WhiteArrow.MVVM.UI
 {
     public class ObservableViewAnimatorTrigger : ObservableTriggerBase
     {
-        private readonly Subject<Unit> _onShowEnded = new();
-        public Observable<Unit> OnShowEnded => _onShowEnded;
+        private readonly Subject<Unit> _showEnded = new();
+        public Observable<Unit> ShowEnded => _showEnded;
 
-        private readonly Subject<Unit> _onHideEnded = new();
-        public Observable<Unit> OnHideEnded => _onHideEnded;
+        private readonly Subject<Unit> _hideEnded = new();
+        public Observable<Unit> HideEnded => _hideEnded;
 
 
         public void OnAnimationShowEnded()
         {
-            _onShowEnded.OnNext(Unit.Default);
+            _showEnded.OnNext(Unit.Default);
         }
 
         public void OnAnimationCloseEnded()
         {
-            _onHideEnded.OnNext(Unit.Default);
+            _hideEnded.OnNext(Unit.Default);
         }
 
 
         protected override void RaiseOnCompletedOnDestroy()
         {
-            _onHideEnded?.Dispose();
-            _onHideEnded?.Dispose();
+            _hideEnded?.Dispose();
+            _hideEnded?.Dispose();
         }
     }
 }
