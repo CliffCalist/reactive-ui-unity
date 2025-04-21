@@ -10,7 +10,7 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        private GameObject _object;
+        protected GameObject _object;
         private ViewAnimations _animations;
 
 
