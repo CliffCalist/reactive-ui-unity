@@ -83,6 +83,12 @@ namespace WhiteArrow.MVVM.UI
 
 
 
+        protected void RebindIfShowed()
+        {
+            if (_isShowed.CurrentValue)
+                Rebind();
+        }
+
         protected void Rebind()
         {
             DisposeBinding();
