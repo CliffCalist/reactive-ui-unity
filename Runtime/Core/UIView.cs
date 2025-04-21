@@ -15,6 +15,8 @@ namespace WhiteArrow.MVVM.UI
 
 
         public bool IsInitialized { get; private set; }
+
+        private bool _skipAnimationsOnce;
         public bool IsAnimationsEnabled => _animations != null && _animations.IsEnabled;
 
         private readonly ReactiveProperty<bool> _isShowed = new();
@@ -100,7 +102,7 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        public bool Show()
+        public bool Show(bool skipAniamtions = false)
         {
             InitIfFalse();
             if (_isShowed.CurrentValue)
@@ -109,6 +111,7 @@ namespace WhiteArrow.MVVM.UI
                 return false;
             }
 
+            _skipAnimationsOnce = skipAniamtions;
             _showState.Value = UIViewShowState.Requested;
             _object.SetActive(true);
             return true;
@@ -125,9 +128,13 @@ namespace WhiteArrow.MVVM.UI
             _isShowed.Value = true;
             _showState.Value = UIViewShowState.Showed;
 
-            if (IsAnimationsEnabled)
+            if (IsAnimationsEnabled && !_skipAnimationsOnce)
                 _animations.PlayShow();
-            else _showState.Value = UIViewShowState.AnimationEnded; // Because, animations is disabled
+            else
+            {
+                _skipAnimationsOnce = false;
+                _showState.Value = UIViewShowState.AnimationEnded;
+            }
 
             OnShowed();
         }
@@ -136,7 +143,7 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        public bool Hide()
+        public bool Hide(bool skipAniamtions = false)
         {
             InitIfFalse();
             if (!_isShowed.CurrentValue)
@@ -145,8 +152,10 @@ namespace WhiteArrow.MVVM.UI
                 return false;
             }
 
+            _skipAnimationsOnce = skipAniamtions;
             _hideState.Value = UIViewHideState.Requested;
-            if (IsAnimationsEnabled)
+
+            if (IsAnimationsEnabled && !_skipAnimationsOnce)
                 _animations.PlayHide();
             else _object.SetActive(false);
 
@@ -156,12 +165,12 @@ namespace WhiteArrow.MVVM.UI
         private void OnDisable()
         {
             InitIfFalse();
+            _skipAnimationsOnce = false;
 
-            // Because, show states are ended, and hide states are started
             _showState.Value = UIViewShowState.None;
-
             _isShowed.Value = false;
             _hideState.Value = UIViewHideState.Hided;
+
             DisposeBinding();
             OnHided();
         }
