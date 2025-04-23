@@ -10,9 +10,9 @@ namespace WhiteArrow.MVVM.UI
         [SerializeField] private Transform _content;
         [SerializeField] private SelectorOption _optionPrefab;
 
-        private List<SelectorOption> _options = new();
+        private readonly List<SelectorOption> _options = new();
 
-        private ReactiveProperty<int> _selectedIndex = new(-1);
+        protected readonly ReactiveProperty<int> _selectedIndex = new(-1);
         public ReadOnlyReactiveProperty<int> SelectedIndex => _selectedIndex;
 
 
