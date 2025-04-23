@@ -17,7 +17,7 @@ namespace WhiteArrow.MVVM.UI
 
 
 
-        public abstract int OptionsCount { get; protected set; }
+        public abstract int OptionsCount { get; }
 
 
 
