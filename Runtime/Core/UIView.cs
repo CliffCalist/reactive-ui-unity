@@ -17,10 +17,16 @@ namespace WhiteArrow.MVVM.UI
         public bool IsInitialized { get; private set; }
 
         private bool _skipAnimationsOnce;
+
         public bool IsAnimationsEnabled => _animations != null && _animations.IsEnabled;
 
+
+        private bool _isSelfHideRequested;
         private readonly ReactiveProperty<bool> _isSelfShowed = new();
         public ReadOnlyReactiveProperty<bool> IsSelfShowed => _isSelfShowed;
+
+        private readonly ReactiveProperty<bool> _isInHierarchyShowed = new();
+        public ReadOnlyReactiveProperty<bool> IsInHierarchyShowed => _isSelfShowed;
 
 
         private readonly ReactiveProperty<UIViewShowState> _showInHierarchyState = new();
@@ -127,6 +133,7 @@ namespace WhiteArrow.MVVM.UI
             Rebind();
 
             _hideInHierarchyState.Value = UIViewHideState.None;
+            _isInHierarchyShowed.Value = true;
             _showInHierarchyState.Value = UIViewShowState.Showed;
 
             if (IsAnimationsEnabled && !_skipAnimationsOnce)
@@ -156,8 +163,11 @@ namespace WhiteArrow.MVVM.UI
             _skipAnimationsOnce = skipAnimations;
             _hideInHierarchyState.Value = UIViewHideState.Requested;
 
-            if (IsAnimationsEnabled && !_skipAnimationsOnce)
+            if (_isInHierarchyShowed.CurrentValue && IsAnimationsEnabled && !_skipAnimationsOnce)
+            {
+                _isSelfHideRequested = true;
                 _animations.PlayHide();
+            }
             else
             {
                 _object.SetActive(false);
@@ -172,7 +182,14 @@ namespace WhiteArrow.MVVM.UI
             InitIfFalse();
             _skipAnimationsOnce = false;
 
+            if (_isSelfHideRequested)
+            {
+                _isSelfShowed.Value = false;
+                _isSelfHideRequested = false;
+            }
+
             _showInHierarchyState.Value = UIViewShowState.None;
+            _isInHierarchyShowed.Value = false;
             _hideInHierarchyState.Value = UIViewHideState.Hided;
 
             DisposeBinding();
