@@ -19,7 +19,7 @@ namespace WhiteArrow.MVVM.UI
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             _index = index;
-            RebindIfShowed();
+            RebindIfShowedInHierarchy();
         }
 
 

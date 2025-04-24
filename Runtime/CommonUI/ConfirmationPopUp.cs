@@ -34,7 +34,7 @@ namespace WhiteArrow.MVVM.UI
 
         public void Confirm()
         {
-            if (!IsShowed.CurrentValue)
+            if (!IsSelfShowed.CurrentValue)
                 return;
 
             _isConfirmed = true;

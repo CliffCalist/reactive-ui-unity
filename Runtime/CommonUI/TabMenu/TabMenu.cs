@@ -32,7 +32,7 @@ namespace WhiteArrow.MVVM.UI
                     .Subscribe(_ => pair.Tab.Show())
                     .AddTo(pair.Tab);
 
-                pair.Tab.IsShowed
+                pair.Tab.IsSelfShowed
                     .Where(v => v)
                     .Subscribe(_ =>
                     {
@@ -54,12 +54,12 @@ namespace WhiteArrow.MVVM.UI
 
                 if (i == _currentTabIndex)
                 {
-                    if (pair.Tab != null && !pair.Tab.IsShowed.CurrentValue)
+                    if (pair.Tab != null && !pair.Tab.IsSelfShowed.CurrentValue)
                         pair.Tab.Show();
                 }
                 else
                 {
-                    if (pair.Tab != null && pair.Tab.IsShowed.CurrentValue)
+                    if (pair.Tab != null && pair.Tab.IsSelfShowed.CurrentValue)
                         pair.Tab.Hide();
                 }
             }

@@ -27,22 +27,22 @@ namespace WhiteArrow.MVVM.UI
             var disposableBuilder = new DisposableBuilder();
 
 
-            IsAnyShowed = Observable.CombineLatest(_views.Select(v => v.IsShowed))
+            IsAnyShowed = Observable.CombineLatest(_views.Select(v => v.IsSelfShowed))
                 .Select(v => v.Any(v => v))
                 .ToReadOnlyReactiveProperty()
                 .AddTo(ref disposableBuilder);
 
-            IsAnyHided = Observable.CombineLatest(_views.Select(v => v.IsShowed))
+            IsAnyHided = Observable.CombineLatest(_views.Select(v => v.IsSelfShowed))
                 .Select(v => v.Any(v => !v))
                 .ToReadOnlyReactiveProperty()
                 .AddTo(ref disposableBuilder);
 
-            IsAllShowed = Observable.CombineLatest(_views.Select(v => v.IsShowed))
+            IsAllShowed = Observable.CombineLatest(_views.Select(v => v.IsSelfShowed))
                 .Select(v => v.All(v => v))
                 .ToReadOnlyReactiveProperty()
                 .AddTo(ref disposableBuilder);
 
-            IsAllHided = Observable.CombineLatest(_views.Select(v => v.IsShowed))
+            IsAllHided = Observable.CombineLatest(_views.Select(v => v.IsSelfShowed))
                 .Select(v => v.All(v => !v))
                 .ToReadOnlyReactiveProperty()
                 .AddTo(ref disposableBuilder);

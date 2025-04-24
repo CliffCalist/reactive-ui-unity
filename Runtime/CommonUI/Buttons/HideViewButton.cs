@@ -10,7 +10,7 @@ namespace WhiteArrow.MVVM.UI
 
         protected override void OnClicked()
         {
-            if (_view.IsShowed.CurrentValue)
+            if (_view.IsSelfShowed.CurrentValue)
                 _view.Hide();
         }
     }
