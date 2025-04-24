@@ -18,3 +18,5 @@ It provides a unified base class `UIView` for building user interface components
 ## Installation
 
 Clone or add this repository as a Git package in Unity:
+```plaintext
+https://github.com/CliffCalist/reactive-ui-unity.git
