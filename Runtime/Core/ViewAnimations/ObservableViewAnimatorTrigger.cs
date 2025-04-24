@@ -1,7 +1,7 @@
 using R3;
 using R3.Triggers;
 
-namespace WhiteArrow.MVVM.UI
+namespace WhiteArrow.ReactiveUI
 {
     public class ObservableViewAnimatorTrigger : ObservableTriggerBase
     {

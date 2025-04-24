@@ -3,7 +3,7 @@ using System.Linq;
 using R3;
 using UnityEngine;
 
-namespace WhiteArrow.MVVM.UI
+namespace WhiteArrow.ReactiveUI
 {
     public abstract class Selector : UIView
     {

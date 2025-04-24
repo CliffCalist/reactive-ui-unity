@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using R3;
 
-namespace WhiteArrow.MVVM.UI
+namespace WhiteArrow.ReactiveUI
 {
     public class CombinedViewAnimations : ViewAnimations
     {

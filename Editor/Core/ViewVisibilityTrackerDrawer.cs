@@ -1,9 +1,9 @@
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using WhiteArrow.MVVM.UI;
+using WhiteArrow.ReactiveUI;
 
-namespace WhiteArrowEditor.MVVM.UI
+namespace WhiteArrowEditor.ReactiveUI
 {
     [CustomPropertyDrawer(typeof(ViewVisibilityTracker))]
     public class ViewVisibilityTrackerDrawer : PropertyDrawer

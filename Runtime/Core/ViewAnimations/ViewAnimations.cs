@@ -2,7 +2,7 @@ using System;
 using R3;
 using UnityEngine;
 
-namespace WhiteArrow.MVVM.UI
+namespace WhiteArrow.ReactiveUI
 {
     public abstract class ViewAnimations : IDisposable
     {

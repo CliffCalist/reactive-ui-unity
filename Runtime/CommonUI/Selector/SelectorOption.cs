@@ -1,7 +1,7 @@
 using System;
 using R3;
 
-namespace WhiteArrow.MVVM.UI
+namespace WhiteArrow.ReactiveUI
 {
     public abstract class SelectorOption : ViewButton
     {

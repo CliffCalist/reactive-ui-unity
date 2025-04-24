@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace WhiteArrow.MVVM.UI
+namespace WhiteArrow.ReactiveUI
 {
     public class ShowViewButton : ViewButton
     {

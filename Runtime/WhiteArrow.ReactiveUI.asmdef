@@ -1,6 +1,6 @@
 {
-    "name": "WhiteArrow.MVVM.UI",
-    "rootNamespace": "WhiteArrow.MVVM.UI",
+    "name": "WhiteArrow.ReactiveUI",
+    "rootNamespace": "WhiteArrow.ReactiveUI",
     "references": [
         "GUID:77221876cc6b8244180b96e320b1bcd4"
     ],

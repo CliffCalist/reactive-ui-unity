@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using R3;
 using UnityEngine;
 
-namespace WhiteArrow.MVVM.UI
+namespace WhiteArrow.ReactiveUI
 {
     public class TabMenu : UIView
     {

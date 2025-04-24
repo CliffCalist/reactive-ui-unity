@@ -1,8 +1,8 @@
 {
-    "name": "com.white-arrow.mvvvm-ui",
+    "name": "com.white-arrow.reactive-ui",
     "version": "1.0.0",
-    "displayName": "MVVM-UI",
-    "description": "MVVM architecture framework for your Unity game’s UI.",
+    "displayName": "ReactiveUI",
+    "description": "Modular reactive UI framework for Unity. Based on UIView and R3 for clean and dynamic interface logic.",
     "licensesUrl": "https://github.com/CliffCalist/MVVM-UI/blob/8317ba043ea61800d72c220ff19493d18f2b10c7/LICENSE",
     "author": {
         "name": "White Arrow",

@@ -4,7 +4,7 @@ using System.Linq;
 using R3;
 using UnityEngine;
 
-namespace WhiteArrow.MVVM.UI
+namespace WhiteArrow.ReactiveUI
 {
     [Serializable]
     public class ViewVisibilityTracker : IDisposable

@@ -1,6 +1,6 @@
 using R3;
 
-namespace WhiteArrow.MVVM.UI
+namespace WhiteArrow.ReactiveUI
 {
     public class TabButton : ViewButton
     {
