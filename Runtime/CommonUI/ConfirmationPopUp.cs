@@ -11,7 +11,7 @@ namespace WhiteArrow.ReactiveUI
 
         private bool _isConfirmed;
 
-        private readonly Subject<bool> _onChoiceMade;
+        private readonly Subject<bool> _onChoiceMade = new();
         public Observable<bool> OnChoiceMade => _onChoiceMade;
 
 
