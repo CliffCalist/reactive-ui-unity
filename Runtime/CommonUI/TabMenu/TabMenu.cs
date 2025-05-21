@@ -7,15 +7,7 @@ namespace WhiteArrow.ReactiveUI
 {
     public class TabMenu : UIView
     {
-        [Serializable]
-        private class ButtonTabPair
-        {
-            public UIView Tab;
-            public TabButton Button;
-        }
-
-
-
+        [SerializeField] private bool _closeTabsManuallyOnHide;
         [SerializeField, Min(0)] private int _currentTabIndex = 0;
         [SerializeField] private List<ButtonTabPair> _buttonTabMap;
 
@@ -41,9 +33,28 @@ namespace WhiteArrow.ReactiveUI
                     })
                     .AddTo(this);
             }
+        }
 
+
+
+        protected override void OnShowed()
+        {
             UpdateMapStates();
         }
+
+        protected override void OnHided()
+        {
+            if (_closeTabsManuallyOnHide)
+            {
+                foreach (var pair in _buttonTabMap)
+                {
+                    if (pair.Tab.IsSelfShowed.CurrentValue)
+                        pair.Tab.Hide();
+                }
+            }
+        }
+
+
 
         private void UpdateMapStates()
         {
@@ -77,5 +88,14 @@ namespace WhiteArrow.ReactiveUI
             }
         }
 #endif
+
+
+
+        [Serializable]
+        private class ButtonTabPair
+        {
+            public UIView Tab;
+            public TabButton Button;
+        }
     }
 }
