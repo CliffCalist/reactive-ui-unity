@@ -73,6 +73,8 @@ namespace WhiteArrow.ReactiveUI
                 return;
 
             _object = gameObject;
+            _isSelfShowed.Value = _object.activeSelf;
+            _isInHierarchyShowed.Value = _object.activeInHierarchy;
 
 
             if (_btnHide != null)
