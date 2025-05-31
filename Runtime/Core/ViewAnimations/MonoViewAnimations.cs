@@ -4,14 +4,12 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public abstract class ViewAnimations : IViewAnimations
+    public abstract class MonoViewAnimations : MonoBehaviour, IViewAnimations
     {
-        [SerializeField] private bool _isEnabled = true;
-
+        [SerializeField] private bool _isEnabled;
 
 
         private bool _isInitialized;
-
 
 
         public bool IsEnabled
@@ -47,7 +45,6 @@ namespace WhiteArrow.ReactiveUI
             ThrowIfNonInitialized();
             PlayShowCore();
         }
-
         protected abstract void PlayShowCore();
 
 

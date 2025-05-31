@@ -11,7 +11,7 @@ namespace WhiteArrow.ReactiveUI
 
 
         protected GameObject _object;
-        private ViewAnimations _animations;
+        protected IViewAnimations _animations { get; private set; }
 
 
         public bool IsInitialized { get; private set; }
@@ -38,7 +38,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        public void SetAnimations(ViewAnimations animations)
+        public void SetAnimations(IViewAnimations animations)
         {
             _animations = animations;
             _animations.Init(this);
@@ -76,6 +76,8 @@ namespace WhiteArrow.ReactiveUI
             _isSelfShowed.Value = _object.activeSelf;
             _isInHierarchyShowed.Value = _object.activeInHierarchy;
 
+            if (TryGetComponent(out IViewAnimations animations))
+                SetAnimations(animations);
 
             if (_btnHide != null)
             {

@@ -12,6 +12,7 @@ namespace WhiteArrow.ReactiveUI
         public Observable<Unit> HideEnded => _hideEnded;
 
 
+
         public void OnAnimationShowEnded()
         {
             _showEnded.OnNext(Unit.Default);
@@ -21,6 +22,7 @@ namespace WhiteArrow.ReactiveUI
         {
             _hideEnded.OnNext(Unit.Default);
         }
+
 
 
         protected override void RaiseOnCompletedOnDestroy()

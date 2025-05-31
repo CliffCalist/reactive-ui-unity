@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI
 {
-    [Serializable]
-    public class AnimatorViewAnimations : ViewAnimations
+    public class AnimatorViewAnimations : MonoViewAnimations
     {
         [SerializeField] private string _showAnimationName = "show";
         [SerializeField] private string _hideAnimationName = "hide";
@@ -47,9 +46,8 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        public override void Dispose()
+        protected override void DisposeCore()
         {
-            base.Dispose();
             _disposable?.Dispose();
         }
     }
