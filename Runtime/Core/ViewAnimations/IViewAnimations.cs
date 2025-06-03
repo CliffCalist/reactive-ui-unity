@@ -5,6 +5,7 @@ namespace WhiteArrow.ReactiveUI
 {
     public interface IViewAnimations : IDisposable
     {
+        internal bool IsInitialized { get; }
         bool IsEnabled { get; }
 
         Observable<Unit> ShowEnded { get; }

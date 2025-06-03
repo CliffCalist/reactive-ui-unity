@@ -9,10 +9,11 @@ namespace WhiteArrow.ReactiveUI
         [SerializeField] private bool _isEnabled = true;
 
 
-
         private bool _isInitialized;
 
 
+
+        bool IViewAnimations.IsInitialized => _isInitialized;
 
         public bool IsEnabled
         {

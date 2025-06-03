@@ -10,6 +10,7 @@ namespace WhiteArrow.ReactiveUI
 
 
         private bool _isInitialized;
+        bool IViewAnimations.IsInitialized => _isInitialized;
 
 
         public bool IsEnabled
@@ -45,6 +46,7 @@ namespace WhiteArrow.ReactiveUI
             ThrowIfNonInitialized();
             PlayShowCore();
         }
+
         protected abstract void PlayShowCore();
 
 
