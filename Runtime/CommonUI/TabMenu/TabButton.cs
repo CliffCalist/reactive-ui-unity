@@ -4,12 +4,12 @@ namespace WhiteArrow.ReactiveUI
 {
     public class TabButton : ViewButton
     {
-        private readonly Subject<Unit> _clicked = new();
-        public Observable<Unit> Clicked => _clicked;
+        private readonly Subject<Unit> _selected = new();
+        public Observable<Unit> Clicked => _selected;
 
 
 
-        protected override sealed void OnClicked() => _clicked.OnNext(Unit.Default);
-        public virtual void SetActive(bool isActive) => _object.SetActive(isActive);
+        protected override sealed void OnClicked() => _selected.OnNext(Unit.Default);
+        public virtual void SetSelectedStatus(bool isSelected) { }
     }
 }

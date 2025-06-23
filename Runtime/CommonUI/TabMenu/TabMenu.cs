@@ -61,7 +61,7 @@ namespace WhiteArrow.ReactiveUI
             for (int i = 0; i < _buttonTabMap.Count; i++)
             {
                 var pair = _buttonTabMap[i];
-                pair.Button.SetActive(i == _currentTabIndex);
+                pair.Button.SetSelectedStatus(i == _currentTabIndex);
 
                 if (i == _currentTabIndex)
                 {
