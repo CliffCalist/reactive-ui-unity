@@ -7,8 +7,8 @@ namespace WhiteArrow.ReactiveUI
     {
         protected int _index { get; private set; } = -1;
 
-        private readonly Subject<int> _clicked = new();
-        public Observable<int> Clicked => _clicked;
+        private readonly Subject<int> _selected = new();
+        public Observable<int> Selected => _selected;
 
 
 
@@ -25,7 +25,7 @@ namespace WhiteArrow.ReactiveUI
 
         protected override void OnClicked()
         {
-            _clicked.OnNext(_index);
+            _selected.OnNext(_index);
         }
 
 

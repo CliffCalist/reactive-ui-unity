@@ -10,14 +10,15 @@ namespace WhiteArrow.ReactiveUI
         [SerializeField] private Transform _content;
         [SerializeField] private SelectorOption _optionPrefab;
 
+
+
         private readonly List<SelectorOption> _options = new();
-
         protected readonly ReactiveProperty<int> _selectedIndex = new(-1);
+
+
+
         public ReadOnlyReactiveProperty<int> SelectedIndex => _selectedIndex;
-
-
-
-        public abstract int OptionsCount { get; }
+        public abstract int TargetOptionsCount { get; }
 
 
 
@@ -32,31 +33,41 @@ namespace WhiteArrow.ReactiveUI
 
         private void UpdateOptionsCount()
         {
-            while (_options.Count < OptionsCount)
+            while (_options.Count < TargetOptionsCount)
             {
-                var newOption = Instantiate(_optionPrefab, _content);
-                OnOptionInstantiated(newOption);
+                var newOption = CreateOption(_optionPrefab);
+                newOption.transform.SetParent(_content, false);
+
+                OnOptionPostInstantiated(newOption);
                 _options.Add(newOption);
 
-                newOption.Clicked
-                    .Subscribe(OnOptionSelected)
+                newOption.Selected
+                    .Subscribe(SelectOption)
                     .AddTo(this);
             }
 
-            while (_options.Count > OptionsCount)
+            while (_options.Count > TargetOptionsCount)
             {
                 var last = _options.LastOrDefault();
                 if (last == null)
                     break;
 
                 _options.Remove(last);
-                OnOptionDestroyed(last);
+                OnOptionPreDestroy(last);
                 Destroy(last.gameObject);
             }
         }
 
-        protected virtual void OnOptionInstantiated(SelectorOption option) { }
-        protected virtual void OnOptionDestroyed(SelectorOption option) { }
+        protected virtual SelectorOption CreateOption(SelectorOption prefab)
+        {
+            return Instantiate(prefab);
+        }
+
+        protected virtual void OnOptionPostInstantiated(SelectorOption option)
+        { }
+
+        protected virtual void OnOptionPreDestroy(SelectorOption option)
+        { }
 
 
 
@@ -77,10 +88,12 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        private void OnOptionSelected(int index)
+        public void SelectOption(int index)
         {
             _selectedIndex.Value = index;
-            UpdateOptionsStatus();
+
+            if (IsInHierarchyShowed.CurrentValue)
+                UpdateOptionsStatus();
         }
     }
 }
