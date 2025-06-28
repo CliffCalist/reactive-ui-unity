@@ -5,7 +5,7 @@ namespace WhiteArrow.ReactiveUI
 {
     public abstract class SelectorOption : ViewButton
     {
-        protected int _index { get; private set; } = -1;
+        protected int _linkedIndex { get; private set; } = -1;
 
         private readonly Subject<int> _selected = new();
         public Observable<int> Selected => _selected;
@@ -13,19 +13,19 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        public void SetIndex(int index)
+        public void SetLinkedIndex(int index)
         {
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            _index = index;
+            _linkedIndex = index;
             RebindIfShowedInHierarchy();
         }
 
 
         protected override void OnClicked()
         {
-            _selected.OnNext(_index);
+            _selected.OnNext(_linkedIndex);
         }
 
 

@@ -5,27 +5,32 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public abstract class Selector : UIView
+    public abstract class Selector<T> : UIView
+        where T : SelectorOption
     {
         [SerializeField] private Transform _content;
-        [SerializeField] private SelectorOption _optionPrefab;
+        [SerializeField] private T _optionPrefab;
 
 
 
-        private readonly List<SelectorOption> _options = new();
+        private readonly List<T> _options = new();
         protected readonly ReactiveProperty<int> _selectedIndex = new(-1);
 
 
 
-        public ReadOnlyReactiveProperty<int> SelectedIndex => _selectedIndex;
         public abstract int TargetOptionsCount { get; }
+        public int OptionsCount => _options.Count;
+
+        public IReadOnlyList<T> Options => _options;
+
+        public ReadOnlyReactiveProperty<int> SelectedIndex => _selectedIndex;
 
 
 
         protected override void BindFromCache()
         {
             UpdateOptionsCount();
-            UpdateOptionsIndexes();
+            UpdateOptionLinkedIndexes();
             UpdateOptionsStatus();
         }
 
@@ -35,7 +40,7 @@ namespace WhiteArrow.ReactiveUI
         {
             while (_options.Count < TargetOptionsCount)
             {
-                var newOption = CreateOption(_optionPrefab);
+                var newOption = CreateOption(_optionPrefab, _options.Count);
                 newOption.transform.SetParent(_content, false);
 
                 OnOptionPostInstantiated(newOption);
@@ -58,23 +63,23 @@ namespace WhiteArrow.ReactiveUI
             }
         }
 
-        protected virtual SelectorOption CreateOption(SelectorOption prefab)
+        protected virtual T CreateOption(T prefab, int index)
         {
             return Instantiate(prefab);
         }
 
-        protected virtual void OnOptionPostInstantiated(SelectorOption option)
+        protected virtual void OnOptionPostInstantiated(T option)
         { }
 
-        protected virtual void OnOptionPreDestroy(SelectorOption option)
+        protected virtual void OnOptionPreDestroy(T option)
         { }
 
 
 
-        private void UpdateOptionsIndexes()
+        private void UpdateOptionLinkedIndexes()
         {
             for (int i = 0; i < _options.Count; i++)
-                _options[i].SetIndex(i);
+                _options[i].SetLinkedIndex(i);
         }
 
         private void UpdateOptionsStatus()
