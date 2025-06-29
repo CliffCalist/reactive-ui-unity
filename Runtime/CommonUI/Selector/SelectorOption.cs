@@ -23,7 +23,7 @@ namespace WhiteArrow.ReactiveUI
         }
 
 
-        protected override void OnClicked()
+        protected override sealed void OnClicked()
         {
             _selected.OnNext(_linkedIndex);
         }
