@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using R3;
@@ -95,10 +96,16 @@ namespace WhiteArrow.ReactiveUI
 
         public void SelectOption(int index)
         {
+            if (index < 0 || index >= _options.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
             _selectedIndex.Value = index;
+            OnOptionSelected(index);
 
             if (IsInHierarchyShowed.CurrentValue)
                 UpdateOptionsStatus();
         }
+
+        protected abstract void OnOptionSelected(int index);
     }
 }
