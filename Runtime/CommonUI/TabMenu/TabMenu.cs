@@ -5,19 +5,16 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public class TabMenu : Selector<SelectorOption>
+    public abstract class TabMenu<T> : Selector<T>
+        where T : SelectorOption
     {
         [SerializeField] private bool _closeTabsManuallyOnHide;
         [SerializeField, Min(0)] private int _initTabIndex = 0;
-        [SerializeField] private List<UIView> _tabs;
 
 
+        protected abstract IReadOnlyList<UIView> _tabs { get; }
 
         private IDisposable _disposables;
-
-
-
-        public override int TargetOptionsCount => _tabs.Count;
 
 
 
