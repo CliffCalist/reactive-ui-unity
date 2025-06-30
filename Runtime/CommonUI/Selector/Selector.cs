@@ -1,27 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using R3;
-using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI
 {
     public abstract class Selector<T> : UIView
         where T : SelectorOption
     {
-        [SerializeField] private Transform _content;
-        [SerializeField] private T _optionPrefab;
-
-
-
+        private IDisposable _optionsSubscription;
         private readonly List<T> _options = new();
         protected readonly ReactiveProperty<int> _selectedIndex = new(-1);
 
 
 
-        public abstract int TargetOptionsCount { get; }
-        public int OptionsCount => _options.Count;
+        protected abstract ISelectorOptionsSynchronizer<T> _optionsSynchronizer { get; }
 
+        public int OptionsCount => _options.Count;
         public IReadOnlyList<T> Options => _options;
 
         public ReadOnlyReactiveProperty<int> SelectedIndex => _selectedIndex;
@@ -39,41 +33,22 @@ namespace WhiteArrow.ReactiveUI
 
         private void UpdateOptionsCount()
         {
-            while (_options.Count < TargetOptionsCount)
+            if (_optionsSynchronizer == null)
+                throw new InvalidOperationException("Options provider cannot be null.");
+
+            _optionsSynchronizer.SyncTo(_options);
+
+            var subscriptionBuilder = new DisposableBuilder();
+            foreach (var option in _options)
             {
-                var newOption = CreateOption(_optionPrefab, _options.Count);
-                newOption.transform.SetParent(_content, false);
-
-                OnOptionPostInstantiated(newOption);
-                _options.Add(newOption);
-
-                newOption.Selected
+                option.Selected
                     .Subscribe(SelectOption)
-                    .AddTo(this);
+                    .AddTo(ref subscriptionBuilder);
             }
 
-            while (_options.Count > TargetOptionsCount)
-            {
-                var last = _options.LastOrDefault();
-                if (last == null)
-                    break;
-
-                _options.Remove(last);
-                OnOptionPreDestroy(last);
-                Destroy(last.gameObject);
-            }
+            _optionsSubscription?.Dispose();
+            _optionsSubscription = subscriptionBuilder.Build();
         }
-
-        protected virtual T CreateOption(T prefab, int index)
-        {
-            return Instantiate(prefab);
-        }
-
-        protected virtual void OnOptionPostInstantiated(T option)
-        { }
-
-        protected virtual void OnOptionPreDestroy(T option)
-        { }
 
 
 
