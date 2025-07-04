@@ -125,16 +125,17 @@ namespace WhiteArrow.ReactiveUI
             }
 
             _skipAnimationsOnce = skipAnimations;
-            _object.SetActive(true);
+
             _isSelfShowed.Value = true;
             _showInHierarchyState.Value = UIViewShowState.Requested;
+            _object.SetActive(true);
+
             return true;
         }
 
         private void OnEnable()
         {
             InitIfFalse();
-            Rebind();
 
             _hideInHierarchyState.Value = UIViewHideState.None;
             _isInHierarchyShowed.Value = true;
@@ -148,6 +149,7 @@ namespace WhiteArrow.ReactiveUI
                 _showInHierarchyState.Value = UIViewShowState.AnimationEnded;
             }
 
+            Rebind();
             OnShowed();
         }
 
