@@ -77,7 +77,7 @@ namespace WhiteArrow.ReactiveUI
             _selectedIndex.Value = index;
             OnOptionSelected(index);
 
-            if (IsInHierarchyShowed.CurrentValue)
+            if (IsSelfShowed.CurrentValue)
                 UpdateOptionsStatus();
         }
 
