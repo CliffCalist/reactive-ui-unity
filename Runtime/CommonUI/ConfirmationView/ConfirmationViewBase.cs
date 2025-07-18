@@ -4,15 +4,12 @@ using UnityEngine.UI;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public class ConfirmationPopUp : UIView
+    public abstract class ConfirmationViewBase : UIView
     {
         [SerializeField] private Button _btnConfirm;
 
 
         private bool _isConfirmed;
-
-        private readonly Subject<bool> _onChoiceMade = new();
-        public Observable<bool> OnChoiceMade => _onChoiceMade;
 
 
 
@@ -25,7 +22,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected override void OnShowed()
+        protected override void BindFromCache()
         {
             _isConfirmed = false;
         }
@@ -38,18 +35,16 @@ namespace WhiteArrow.ReactiveUI
                 return;
 
             _isConfirmed = true;
-            OnConfirmed();
-        }
-
-        protected virtual void OnConfirmed()
-        {
             Hide();
         }
 
-
         protected override void OnHided()
         {
-            _onChoiceMade.OnNext(_isConfirmed);
+            OnChoiceMade(_isConfirmed);
         }
+
+
+
+        protected abstract void OnChoiceMade(bool isConfirmed);
     }
 }
