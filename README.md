@@ -14,10 +14,15 @@ It allows you to cleanly separate UI from game logic, while still enabling fully
 
 ## Installing
 
-Just add this line to your Unity project's `manifest.json`:
+This package requires **[R3](https://github.com/Cysharp/R3?tab=readme-ov-file#unity)** to work.  
+Make sure to install it in your project before using ReactiveUI.
 
-```json
-"com.whitearrow.reactiveui": "https://github.com/white-arrow-dev/reactive-ui-unity.git"
+---
+
+To install via UPM, use **"Install package from git URL"** and add the following:
+
+```text
+1. https://github.com/CliffCalist/reactive-ui-unity.git
 ```
 
 ## Usage
