@@ -7,8 +7,8 @@ namespace WhiteArrow.ReactiveUI.Auth
     public abstract class SignInViewBase : AuthFormViewBase
     {
         [Header("Inputs")]
-        [SerializeField] private TextMeshProUGUI _inputEmail;
-        [SerializeField] private TextMeshProUGUI _inputPassword;
+        [SerializeField] private TMP_InputField _inputEmail;
+        [SerializeField] private TMP_InputField _inputPassword;
 
 
         protected override sealed bool IsInputValid()
