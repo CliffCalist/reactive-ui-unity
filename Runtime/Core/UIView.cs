@@ -76,7 +76,11 @@ namespace WhiteArrow.ReactiveUI
         public void SetAnimations(IViewAnimations animations)
         {
             InitIfFalse();
+            SetAnimationsWithoutInitCheck(animations);
+        }
 
+        private void SetAnimationsWithoutInitCheck(IViewAnimations animations)
+        {
             _animations = animations;
             _animations.Init(this);
 
@@ -114,7 +118,7 @@ namespace WhiteArrow.ReactiveUI
             _isInHierarchyShowed.Value = _object.activeInHierarchy;
 
             if (TryGetComponent(out IViewAnimations animations))
-                SetAnimations(animations);
+                SetAnimationsWithoutInitCheck(animations);
 
             if (_btnHide != null)
             {
