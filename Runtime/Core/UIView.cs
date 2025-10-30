@@ -14,6 +14,7 @@ namespace WhiteArrow.ReactiveUI
         protected IViewAnimations _animations { get; private set; }
 
 
+        public bool IsInitializationInProgress { get; private set; }
         public bool IsInitialized { get; private set; }
 
         private bool _skipAnimationsOnce;
@@ -76,11 +77,6 @@ namespace WhiteArrow.ReactiveUI
         public void SetAnimations(IViewAnimations animations)
         {
             InitIfFalse();
-            SetAnimationsWithoutInitCheck(animations);
-        }
-
-        private void SetAnimationsWithoutInitCheck(IViewAnimations animations)
-        {
             _animations = animations;
             _animations.Init(this);
 
@@ -110,15 +106,16 @@ namespace WhiteArrow.ReactiveUI
 
         private void Init()
         {
-            if (IsInitialized)
+            if (IsInitialized || IsInitializationInProgress)
                 return;
 
+            IsInitializationInProgress = true;
             _object = gameObject;
             _isSelfShowed.Value = _object.activeSelf;
             _isInHierarchyShowed.Value = _object.activeInHierarchy;
 
             if (TryGetComponent(out IViewAnimations animations))
-                SetAnimationsWithoutInitCheck(animations);
+                SetAnimations(animations);
 
             if (_btnHide != null)
             {
@@ -129,6 +126,7 @@ namespace WhiteArrow.ReactiveUI
 
 
             InitCore();
+            IsInitializationInProgress = false;
             IsInitialized = true;
         }
 
