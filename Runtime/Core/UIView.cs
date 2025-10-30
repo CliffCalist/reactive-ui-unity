@@ -18,28 +18,65 @@ namespace WhiteArrow.ReactiveUI
 
         private bool _skipAnimationsOnce;
 
-        public bool IsAnimationsEnabled => _animations != null && _animations.IsEnabled;
+        public bool IsAnimationsEnabled
+        {
+            get
+            {
+                InitIfFalse();
+                return _animations != null && _animations.IsEnabled;
+            }
+        }
 
 
         private bool _isSelfHideRequested;
         private readonly ReactiveProperty<bool> _isSelfShowed = new();
-        public ReadOnlyReactiveProperty<bool> IsSelfShowed => _isSelfShowed;
+        public ReadOnlyReactiveProperty<bool> IsSelfShowed
+        {
+            get
+            {
+                InitIfFalse();
+                return _isSelfShowed;
+            }
+        }
 
         private readonly ReactiveProperty<bool> _isInHierarchyShowed = new();
-        public ReadOnlyReactiveProperty<bool> IsInHierarchyShowed => _isSelfShowed;
+        public ReadOnlyReactiveProperty<bool> IsInHierarchyShowed
+        {
+            get
+            {
+                InitIfFalse();
+                return _isInHierarchyShowed;
+            }
+        }
 
 
         private readonly ReactiveProperty<UIViewShowState> _showInHierarchyState = new();
-        public ReadOnlyReactiveProperty<UIViewShowState> ShowInHierarchyState => _showInHierarchyState;
+        public ReadOnlyReactiveProperty<UIViewShowState> ShowInHierarchyState
+        {
+            get
+            {
+                InitIfFalse();
+                return _showInHierarchyState;
+            }
+        }
 
         private readonly ReactiveProperty<UIViewHideState> _hideInHierarchyState = new();
-        public ReadOnlyReactiveProperty<UIViewHideState> HideInHierarchyState => _hideInHierarchyState;
+        public ReadOnlyReactiveProperty<UIViewHideState> HideInHierarchyState
+        {
+            get
+            {
+                InitIfFalse();
+                return _hideInHierarchyState;
+            }
+        }
 
 
 
 
         public void SetAnimations(IViewAnimations animations)
         {
+            InitIfFalse();
+
             _animations = animations;
             _animations.Init(this);
 

@@ -7,7 +7,6 @@ namespace WhiteArrow.ReactiveUI.Auth
     public abstract class ChangeUserPasswordViewBase : ChangeUserDataViewBase
     {
         [Header("Input")]
-        [SerializeField] private int _minLength = 3;
         [SerializeField] private TMP_InputField _inputPassword;
         [SerializeField] private TMP_InputField _inputConfirmPassword;
 
