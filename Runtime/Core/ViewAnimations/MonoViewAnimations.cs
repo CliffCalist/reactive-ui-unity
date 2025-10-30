@@ -6,7 +6,7 @@ namespace WhiteArrow.ReactiveUI
 {
     public abstract class MonoViewAnimations : MonoBehaviour, IViewAnimations
     {
-        [SerializeField] private bool _isEnabled;
+        [SerializeField] private bool _isEnabled = true;
 
 
         private bool _isInitialized;
