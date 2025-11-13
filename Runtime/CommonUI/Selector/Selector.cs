@@ -81,6 +81,7 @@ namespace WhiteArrow.ReactiveUI
                 UpdateOptionsStatus();
         }
 
-        protected abstract void OnOptionSelected(int index);
+        protected virtual void OnOptionSelected(int index)
+        { }
     }
 }
