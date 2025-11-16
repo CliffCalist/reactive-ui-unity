@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using R3;
 using UnityEngine;
 
@@ -27,14 +28,12 @@ namespace WhiteArrow.ReactiveUI
 
             for (int i = 0; i < _tabs.Count; i++)
             {
-                var index = i;
-                var tab = _tabs[index];
+                var tab = _tabs[i];
                 if (tab == null)
                     continue;
 
                 tab.IsSelfShowed
-                    .Where(v => v && _selectedIndex.Value != index)
-                    .Subscribe(_ => SelectOption(index))
+                    .Subscribe(isShowed => OnTabShowStateChanged(isShowed, tab))
                     .AddTo(ref disposablesBuilder);
             }
 
@@ -49,16 +48,18 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected override void OnHided()
+        private void OnTabShowStateChanged(bool isShowed, UIView tab)
         {
-            if (_closeTabsManuallyOnHide)
+            var tabIndex = _tabs.ToList().IndexOf(tab);
+            if (isShowed && _selectedIndex.Value != tabIndex)
             {
-                foreach (var tab in _tabs)
-                {
-                    if (tab.IsSelfShowed.CurrentValue)
-                        tab.Hide();
-                }
+                SelectOption(tabIndex);
+                return;
             }
+
+            var isAllTabsHidden = _tabs.All(t => !t.IsSelfShowed.CurrentValue);
+            if (isAllTabsHidden)
+                SelectOption(_initTabIndex);
         }
 
 
@@ -80,6 +81,20 @@ namespace WhiteArrow.ReactiveUI
                     tab.Show();
                 else if (i != _selectedIndex.Value && tab.IsSelfShowed.CurrentValue)
                     tab.Hide();
+            }
+        }
+
+
+
+        protected override void OnHided()
+        {
+            if (_closeTabsManuallyOnHide)
+            {
+                foreach (var tab in _tabs)
+                {
+                    if (tab.IsSelfShowed.CurrentValue)
+                        tab.Hide();
+                }
             }
         }
 
