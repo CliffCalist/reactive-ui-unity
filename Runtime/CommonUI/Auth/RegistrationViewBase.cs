@@ -11,17 +11,25 @@ namespace WhiteArrow.ReactiveUI.Auth
         [SerializeField] private TMP_InputField _inputPassword;
         [SerializeField] private TMP_InputField _inputConfirmPassword;
 
+        [Space]
+        [SerializeField] private bool _isNameUsed;
+        [SerializeField] private TMP_InputField _inputName;
+
 
 
         protected override sealed bool IsInputValid()
         {
             return AuthInputValidator.IsValidEmail(_inputEmail.text) &&
-                AuthInputValidator.IsValidPassword(_inputPassword.text, _inputConfirmPassword.text);
+                AuthInputValidator.IsValidPassword(_inputPassword.text, _inputConfirmPassword.text) &&
+                _isNameUsed ? AuthInputValidator.IsValidName(_inputName.text) : true;
         }
 
         protected override sealed void PerformAction(Action<AuthOperationResult> callback)
         {
-            var data = new AuthCredentials(_inputEmail.text, _inputPassword.text);
+            var data = _isNameUsed ?
+                new AuthCredentials(_inputEmail.text, _inputPassword.text, _inputName.text) :
+                new AuthCredentials(_inputEmail.text, _inputPassword.text);
+
             Registration(data, callback);
         }
 
