@@ -71,15 +71,20 @@ namespace WhiteArrow.ReactiveUI
 
         private void UpdateTabsVisibility()
         {
+            var selectedTab = _tabs[_selectedIndex.Value];
+            if (selectedTab != null && !selectedTab.IsSelfShowed.CurrentValue)
+                selectedTab.Show();
+
             for (int i = 0; i < _tabs.Count; i++)
             {
+                if (i == _selectedIndex.Value)
+                    continue;
+
                 var tab = _tabs[i];
                 if (tab == null)
                     continue;
 
-                if (i == _selectedIndex.Value && !tab.IsSelfShowed.CurrentValue)
-                    tab.Show();
-                else if (i != _selectedIndex.Value && tab.IsSelfShowed.CurrentValue)
+                if (tab.IsSelfShowed.CurrentValue)
                     tab.Hide();
             }
         }
