@@ -274,12 +274,44 @@ Observable
 
 ## Built-in UI Elements
 
-1. `UIButton` — reactive button with event streams
-2. `ShowUIButton` — triggers `Show()` on assigned `UIView`
-3. `HideUIwButton` — triggers `Hide()` on assigned `UIView`
-4. `Selector` / `SelectorOption` — toggle group with single active option
-5. `TabMenu` — selector for switching between `UIView`
-6. `ConfirmationPopUp` — confirmation dialog pop-up
+### Buttons
+1. **UIButton** — reactive button with event streams  
+2. **ShowUIButton / HideUIButton** — calls `Show()` / `Hide()` on the assigned `UIView`  
+3. **SwitchUIButton** — hides one `UIView` and shows another  
+
+---
+
+### Selectors
+1. **Selector<TData, TOption>** — base class for selectors with typed data and options  
+2. **TabBar** — selector-based tab bar for switching between UI sections  
+
+---
+
+### Confirmation
+1. **ConfirmationUIBase** — base class for confirmation UI logic  
+2. **ConfirmationUI** — simple confirmation dialog using `Action<bool> onChoiceMade`  
+
+---
+
+### Authentication  
+> These are abstract UI classes.  
+> They do **not** enforce any backend (Firebase, PlayFab, custom API).  
+> Your implementation should inherit from these classes and define the actual request logic (e.g., registration call, sign-in call, password reset API, etc.).  
+> The UI handles validation, state, and interaction — you implement the backend calls.
+
+#### General
+1. **AuthFormUIBase** — base class for authentication-related forms  
+
+#### Authorization
+2. **RegistrationUIBase**
+3. **SignInUIBase**
+4. **ResetUserPasswordUIBase**
+5. **CredentialConfirmUIBase** — base form for confirming account ownership (reauthentication / sensitive actions)  
+
+#### User Data Modification
+6. **ChangeUserEmailUIBase**
+7. **ChangeUserPasswordUIBase**
+8. **ChangeUserNameUIBase**
 
 ---
 
