@@ -56,11 +56,11 @@ See the full list of `UIView` properties in the section below.
 
 When your UI reflects some external state, inherit from `UIView` and define your binding logic.
 
-- Use a method called `Bind(...)` to accept and cache the binding context.
-- This does **not** bind immediately — it's only a caching step.
-- Always call `RecreateSubscriptionsIfVisible()` after assigning new data. It will create subscriptions now if visible, or wait until shown.
+- Use a method called `Bind(...)` to accept and cache the binding context. This does **not** bind immediately — it's only a caching step. Always call `RecreateSubscriptionsIfVisible()` after assigning new data. It will create subscriptions now if visible, or wait until shown.
 - Do actual subscription logic in `CreateSubscriptionsCore()`.
-- Cleanup subscriptions or listeners in `DisposeSubscriptionsCore()`. This method is called on hide, recreate subscriptions, or destroy.
+This method may return an `IDisposable` representing all subscriptions created inside it. R3 provides a `DisposablesBuilder`, which lets you combine multiple subscriptions into one disposable object. `UIView` will automatically dispose that returned `IDisposable` when needed. If no subscriptions are created, you may return `null`.
+- Subscriptions created **outside** of `CreateSubscriptionsCore()` (for example, inside helper methods, callbacks, or one-off interactions) must be managed manually. Usually, the most convenient approach is to cache such disposables and clean them up inside `DisposeSubscriptionsCore()`, which is invoked together with the main subscription disposal.
+
 
 Example:
 ```csharp
@@ -68,10 +68,17 @@ public class MyUI : UIView
 {
     private PlayerStats _playerStats;
 
+    // Example of a subscription created outside CreateSubscriptionsCore
+    private IDisposable _extraSubscription;
+
+
+
     protected override void InitCore()
     {
-        // One-time setup logic
+        // One-time setup
     }
+
+
 
     public void Bind(PlayerStats stats)
     {
@@ -82,11 +89,37 @@ public class MyUI : UIView
     protected override IDisposable CreateSubscriptionsCore()
     {
         if (_playerStats == null)
-            return;
+            return null;
 
-        return _playerStats.HP
-            .Subscribe(UpdateHPBar);
+        var builder = new DisposablesBuilder();
+
+        // Example: build multiple subscriptions into one disposable
+        _playerStats.HP
+            .Subscribe(UpdateHPBar)
+            .AddTo(ref builder);
+
+        _playerStats.Mana
+            .Subscribe(UpdateManaBar)
+            .AddTo(ref builder);
+
+        return builder.Build();
     }
+
+
+
+    public void RegisterExtraListener(Inventory inventory)
+    {
+        // Subscription created outside CreateSubscriptionsCore
+        _extraSubscription = inventory.Updated.Subscribe(_ => RefreshInventory());
+    }
+
+    protected override void DisposeSubscriptionsCore()
+    {
+        // Dispose manually-managed subscriptions
+        _extraSubscription?.Dispose();
+        _extraSubscription = null;
+    }
+
 
     protected override void OnShowedCore()
     {
@@ -97,6 +130,12 @@ public class MyUI : UIView
     {
         // Runs after Hide() completes
     }
+
+
+
+    private void UpdateHPBar(int hp) { }
+    private void UpdateManaBar(int mana) { }
+    private void RefreshInventory() { }
 }
 ```
 
