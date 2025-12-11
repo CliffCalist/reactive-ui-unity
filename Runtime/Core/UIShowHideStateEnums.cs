@@ -1,5 +1,5 @@
 namespace WhiteArrow.ReactiveUI
 {
-    public enum UIViewShowState { None, Requested, Showed, AnimationEnded }
-    public enum UIViewHideState { None, Requested, Hided }
+    public enum UIShowState { None, Requested, Showed, AnimationEnded }
+    public enum UIHideState { None, Requested, Hided }
 }

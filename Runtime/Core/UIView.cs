@@ -57,8 +57,8 @@ namespace WhiteArrow.ReactiveUI
         }
 
 
-        private readonly ReactiveProperty<UIViewShowState> _showInHierarchyState = new();
-        public ReadOnlyReactiveProperty<UIViewShowState> ShowInHierarchyState
+        private readonly ReactiveProperty<UIShowState> _showInHierarchyState = new();
+        public ReadOnlyReactiveProperty<UIShowState> ShowInHierarchyState
         {
             get
             {
@@ -67,8 +67,8 @@ namespace WhiteArrow.ReactiveUI
             }
         }
 
-        private readonly ReactiveProperty<UIViewHideState> _hideInHierarchyState = new();
-        public ReadOnlyReactiveProperty<UIViewHideState> HideInHierarchyState
+        private readonly ReactiveProperty<UIHideState> _hideInHierarchyState = new();
+        public ReadOnlyReactiveProperty<UIHideState> HideInHierarchyState
         {
             get
             {
@@ -88,7 +88,7 @@ namespace WhiteArrow.ReactiveUI
 
             _animations.ShowEnded
                 .Where(_ => IsAnimationsEnabled)
-                .Subscribe(_ => _showInHierarchyState.Value = UIViewShowState.AnimationEnded)
+                .Subscribe(_ => _showInHierarchyState.Value = UIShowState.AnimationEnded)
                 .AddTo(this);
 
             _animations.HideEnded
@@ -144,8 +144,8 @@ namespace WhiteArrow.ReactiveUI
         #region Subscriptions
         protected void RecreateSubscriptionsIfVisible()
         {
-            if (_showInHierarchyState.Value == UIViewShowState.Showed ||
-                _showInHierarchyState.Value == UIViewShowState.AnimationEnded)
+            if (_showInHierarchyState.Value == UIShowState.Showed ||
+                _showInHierarchyState.Value == UIShowState.AnimationEnded)
             {
                 RecreateSubscriptions();
             }
@@ -184,7 +184,7 @@ namespace WhiteArrow.ReactiveUI
             _skipAnimationsOnce = skipAnimations;
 
             _isSelfShowed.Value = true;
-            _showInHierarchyState.Value = UIViewShowState.Requested;
+            _showInHierarchyState.Value = UIShowState.Requested;
             _object.SetActive(true);
 
             return true;
@@ -194,16 +194,16 @@ namespace WhiteArrow.ReactiveUI
         {
             InitIfFalse();
 
-            _hideInHierarchyState.Value = UIViewHideState.None;
+            _hideInHierarchyState.Value = UIHideState.None;
             _isInHierarchyShowed.Value = true;
-            _showInHierarchyState.Value = UIViewShowState.Showed;
+            _showInHierarchyState.Value = UIShowState.Showed;
 
             if (IsAnimationsEnabled && !_skipAnimationsOnce)
                 _animations.PlayShow();
             else
             {
                 _skipAnimationsOnce = false;
-                _showInHierarchyState.Value = UIViewShowState.AnimationEnded;
+                _showInHierarchyState.Value = UIShowState.AnimationEnded;
             }
 
             RecreateSubscriptions();
@@ -226,7 +226,7 @@ namespace WhiteArrow.ReactiveUI
             }
 
             _skipAnimationsOnce = skipAnimations;
-            _hideInHierarchyState.Value = UIViewHideState.Requested;
+            _hideInHierarchyState.Value = UIHideState.Requested;
 
             if (_isInHierarchyShowed.CurrentValue && IsAnimationsEnabled && !_skipAnimationsOnce)
             {
@@ -253,9 +253,9 @@ namespace WhiteArrow.ReactiveUI
                 _isSelfHideRequested = false;
             }
 
-            _showInHierarchyState.Value = UIViewShowState.None;
+            _showInHierarchyState.Value = UIShowState.None;
             _isInHierarchyShowed.Value = false;
-            _hideInHierarchyState.Value = UIViewHideState.Hided;
+            _hideInHierarchyState.Value = UIHideState.Hided;
 
             DisposeSubscriptions();
             OnHided();
