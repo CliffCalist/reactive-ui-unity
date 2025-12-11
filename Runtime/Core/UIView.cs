@@ -18,7 +18,7 @@ namespace WhiteArrow.ReactiveUI
         protected GameObject _object { get; private set; }
         private bool _isSelfHideRequested;
 
-        protected IViewAnimations _animations { get; private set; }
+        protected IUIAnimations _animations { get; private set; }
         private bool _skipAnimationsOnce;
 
         private IDisposable _subscriptions;
@@ -80,7 +80,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        public void SetAnimations(IViewAnimations animations)
+        public void SetAnimations(IUIAnimations animations)
         {
             InitIfFalse();
             _animations = animations;
@@ -120,7 +120,7 @@ namespace WhiteArrow.ReactiveUI
             _isSelfShowed.Value = _object.activeSelf;
             _isInHierarchyShowed.Value = _object.activeInHierarchy;
 
-            if (TryGetComponent(out IViewAnimations animations))
+            if (TryGetComponent(out IUIAnimations animations))
                 SetAnimations(animations);
 
             if (_btnHide != null)
@@ -157,6 +157,8 @@ namespace WhiteArrow.ReactiveUI
             _subscriptions = CreateSubscriptionsCore();
         }
 
+        protected virtual IDisposable CreateSubscriptionsCore() => null;
+
         private void DisposeSubscriptions()
         {
             _subscriptions?.Dispose();
@@ -165,8 +167,6 @@ namespace WhiteArrow.ReactiveUI
         }
 
         protected virtual void DisposeSubscriptionsCore() { }
-
-        private IDisposable CreateSubscriptionsCore() => null;
         #endregion
 
 
@@ -207,10 +207,10 @@ namespace WhiteArrow.ReactiveUI
             }
 
             RecreateSubscriptions();
-            OnShowed();
+            OnShowedCore();
         }
 
-        protected virtual void OnShowed() { }
+        protected virtual void OnShowedCore() { }
         #endregion
 
 
@@ -258,10 +258,10 @@ namespace WhiteArrow.ReactiveUI
             _hideInHierarchyState.Value = UIHideState.Hided;
 
             DisposeSubscriptions();
-            OnHided();
+            OnHidedCore();
         }
 
-        protected virtual void OnHided() { }
+        protected virtual void OnHidedCore() { }
         #endregion
 
 

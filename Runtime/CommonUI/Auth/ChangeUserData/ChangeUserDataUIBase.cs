@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI.Auth
 {
-    public abstract class ChangeUserDataViewBase : AuthFormViewBase
+    public abstract class ChangeUserDataUIBase : AuthFormUIBase
     {
         [Header("Credential confirm")]
         [SerializeField] private bool _useCredentialConfirm = true;
-        [SerializeField] private CredentialConfirmViewBase _confirmCredentialView;
+        [SerializeField] private CredentialConfirmUIBase _confirmCredentialUI;
 
 
 
@@ -15,7 +15,7 @@ namespace WhiteArrow.ReactiveUI.Auth
         {
             if (_useCredentialConfirm)
             {
-                _confirmCredentialView.Bind(isSuccess =>
+                _confirmCredentialUI.Bind(isSuccess =>
                 {
                     if (isSuccess)
                         PerformChange(callback);

@@ -5,7 +5,7 @@ using WhiteArrow.ReactiveUI;
 
 namespace WhiteArrowEditor.ReactiveUI
 {
-    [CustomPropertyDrawer(typeof(ViewVisibilityTracker))]
+    [CustomPropertyDrawer(typeof(UIVisibilityTracker))]
     public class ViewVisibilityTrackerDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)

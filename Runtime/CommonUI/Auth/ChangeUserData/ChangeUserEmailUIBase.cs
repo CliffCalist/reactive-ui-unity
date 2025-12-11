@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI.Auth
 {
-    public abstract class ChangeUserEmailViewBase : ChangeUserDataViewBase
+    public abstract class ChangeUserEmailUIBase : ChangeUserDataUIBase
     {
         [Header("Input")]
         [SerializeField] private TMP_InputField _inputEmail;

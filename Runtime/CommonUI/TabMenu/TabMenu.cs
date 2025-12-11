@@ -15,13 +15,11 @@ namespace WhiteArrow.ReactiveUI
 
         protected abstract IReadOnlyList<UIView> _tabs { get; }
 
-        private IDisposable _disposables;
 
 
-
-        protected override void CreateSubscriptions()
+        protected override IDisposable CreateSubscriptionsCore()
         {
-            base.CreateSubscriptions();
+            base.CreateSubscriptionsCore();
             SelectOption(_initTabIndex);
 
             var disposablesBuilder = new DisposableBuilder();
@@ -37,13 +35,7 @@ namespace WhiteArrow.ReactiveUI
                     .AddTo(ref disposablesBuilder);
             }
 
-            _disposables = disposablesBuilder.Build();
-        }
-
-        protected override void DisposeSubscriptions()
-        {
-            _disposables?.Dispose();
-            _disposables = null;
+            return disposablesBuilder.Build();
         }
 
 
@@ -91,7 +83,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected override void OnHided()
+        protected override void OnHidedCore()
         {
             if (_closeTabsManuallyOnHide)
             {

@@ -6,7 +6,7 @@ using WhiteArrow.ReactiveUI;
 
 namespace WhiteArrowEditor.ReactiveUI
 {
-    [CustomEditor(typeof(MonoViewAnimations), true)]
+    [CustomEditor(typeof(MonoUIAnimations), true)]
     public class MonoViewAnimationsEditor : Editor
     {
         public override VisualElement CreateInspectorGUI()
@@ -14,8 +14,8 @@ namespace WhiteArrowEditor.ReactiveUI
             var root = new VisualElement();
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
-            var monoAnimations = (MonoViewAnimations)target;
-            var animations = monoAnimations as IViewAnimations;
+            var monoAnimations = (MonoUIAnimations)target;
+            var animations = monoAnimations as IUIAnimations;
 
 
 

@@ -7,6 +7,6 @@ namespace WhiteArrow.ReactiveUI
         where T : SelectorOption
     {
         public T Option;
-        public UIView View;
+        public UIView UI;
     }
 }

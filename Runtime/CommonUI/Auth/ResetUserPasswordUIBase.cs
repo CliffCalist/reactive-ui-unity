@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI.Auth
 {
-    public abstract class ResetUserPasswordViewBase : AuthFormViewBase
+    public abstract class ResetUserPasswordUIBase : AuthFormUIBase
     {
         [SerializeField] private TMP_InputField _inputEmail;
 

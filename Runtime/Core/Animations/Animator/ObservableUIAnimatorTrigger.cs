@@ -3,7 +3,7 @@ using R3.Triggers;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public class ObservableViewAnimatorTrigger : ObservableTriggerBase
+    public class ObservableUIAnimatorTrigger : ObservableTriggerBase
     {
         private readonly Subject<Unit> _showEnded = new();
         public Observable<Unit> ShowEnded => _showEnded;

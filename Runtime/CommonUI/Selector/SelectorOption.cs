@@ -3,7 +3,7 @@ using R3;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public class SelectorOption : ViewButton
+    public class SelectorOption : UIButton
     {
         protected int _linkedIndex { get; private set; } = -1;
 

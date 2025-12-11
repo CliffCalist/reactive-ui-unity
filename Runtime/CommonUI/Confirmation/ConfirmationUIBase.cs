@@ -1,10 +1,11 @@
+using System;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public abstract class ConfirmationViewBase : UIView
+    public abstract class ConfirmationUIBase : UIView
     {
         [SerializeField] private Button _btnConfirm;
 
@@ -22,9 +23,10 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected override void CreateSubscriptions()
+        protected override IDisposable CreateSubscriptionsCore()
         {
             _isConfirmed = false;
+            return null;
         }
 
 
@@ -38,7 +40,7 @@ namespace WhiteArrow.ReactiveUI
             Hide();
         }
 
-        protected override void OnHided()
+        protected override void OnHidedCore()
         {
             OnChoiceMade(_isConfirmed);
         }

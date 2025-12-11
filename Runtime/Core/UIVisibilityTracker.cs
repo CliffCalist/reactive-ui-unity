@@ -7,7 +7,7 @@ using UnityEngine;
 namespace WhiteArrow.ReactiveUI
 {
     [Serializable]
-    public class ViewVisibilityTracker : IDisposable
+    public class UIVisibilityTracker : IDisposable
     {
         [SerializeField] private List<UIView> _views = new();
 

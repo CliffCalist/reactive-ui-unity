@@ -2,7 +2,7 @@ using System;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public class ConfirmationView : ConfirmationViewBase
+    public class ConfirmationUI : ConfirmationUIBase
     {
         private Action<bool> _onChoiceMade;
 

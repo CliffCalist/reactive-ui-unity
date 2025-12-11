@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace WhiteArrow.ReactiveUI.Auth
 {
-    public abstract class AuthFormViewBase : UIView
+    public abstract class AuthFormUIBase : UIView
     {
         [SerializeField] private Button _btnConfirm;
 
@@ -16,16 +16,15 @@ namespace WhiteArrow.ReactiveUI.Auth
 
 
 
-        private IDisposable _disposable;
         private bool _isPending;
 
 
 
-        protected override sealed void CreateSubscriptions()
+        protected override sealed IDisposable CreateSubscriptionsCore()
         {
             _errorObject?.SetActive(false);
 
-            _disposable = _btnConfirm.OnClickAsObservable()
+            var disposable = _btnConfirm.OnClickAsObservable()
                 .Where(_ =>
                 {
                     if (!_isPending)
@@ -35,11 +34,8 @@ namespace WhiteArrow.ReactiveUI.Auth
                     return false;
                 })
                 .Subscribe(_ => OnConfirmPressed());
-        }
 
-        protected override sealed void DisposeSubscriptions()
-        {
-            _disposable?.Dispose();
+            return disposable;
         }
 
 

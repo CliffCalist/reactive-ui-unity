@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI.Auth
 {
-    public abstract class CredentialConfirmViewBase : AuthFormViewBase
+    public abstract class CredentialConfirmUIBase : AuthFormUIBase
     {
         [SerializeField] private TMP_InputField _inputPassword;
 
@@ -43,9 +43,9 @@ namespace WhiteArrow.ReactiveUI.Auth
 
 
 
-        protected override void OnHided()
+        protected override void OnHidedCore()
         {
-            base.OnHided();
+            base.OnHidedCore();
             _callback?.Invoke(false);
             _callback = null;
         }

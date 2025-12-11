@@ -11,7 +11,7 @@ namespace WhiteArrow.ReactiveUI
         [SerializeField] private List<ViewTabOptionPair<T>> _map;
 
 
-        public IReadOnlyList<UIView> Tabs => _map.ConvertAll(pair => pair.View);
+        public IReadOnlyList<UIView> Tabs => _map.ConvertAll(pair => pair.UI);
 
 
 

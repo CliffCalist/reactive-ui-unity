@@ -3,7 +3,7 @@ using R3;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public interface IViewAnimations : IDisposable
+    public interface IUIAnimations : IDisposable
     {
         internal bool IsInitialized { get; }
         bool IsEnabled { get; }

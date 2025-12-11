@@ -4,10 +4,9 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI.Auth
 {
-    public abstract class ChangeUserNameViewBase : ChangeUserDataViewBase
+    public abstract class ChangeUserNameUIBase : ChangeUserDataUIBase
     {
         [Header("Input")]
-        [SerializeField, Min(1)] private int _minLength = 3;
         [SerializeField] private TMP_InputField _inputName;
 
 

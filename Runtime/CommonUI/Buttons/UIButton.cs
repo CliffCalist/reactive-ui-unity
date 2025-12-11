@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace WhiteArrow.ReactiveUI
 {
     [RequireComponent(typeof(Button))]
-    public abstract class ViewButton : UIView
+    public abstract class UIButton : UIView
     {
         protected override void InitCore()
         {

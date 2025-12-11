@@ -4,16 +4,14 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public abstract class ViewAnimations : IViewAnimations
+    public abstract class MonoUIAnimations : MonoBehaviour, IUIAnimations
     {
         [SerializeField] private bool _isEnabled = true;
 
 
         private bool _isInitialized;
+        bool IUIAnimations.IsInitialized => _isInitialized;
 
-
-
-        bool IViewAnimations.IsInitialized => _isInitialized;
 
         public bool IsEnabled
         {
@@ -30,7 +28,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        void IViewAnimations.Init(UIView view)
+        void IUIAnimations.Init(UIView view)
         {
             if (_isInitialized)
                 throw new Exception($"The {GetType().Name} is already initialized.");
@@ -43,7 +41,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        void IViewAnimations.PlayShow()
+        void IUIAnimations.PlayShow()
         {
             ThrowIfNonInitialized();
             PlayShowCore();
@@ -53,7 +51,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        void IViewAnimations.PlayHide()
+        void IUIAnimations.PlayHide()
         {
             ThrowIfNonInitialized();
             PlayHideCore();

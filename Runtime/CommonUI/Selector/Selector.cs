@@ -22,11 +22,12 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected override void CreateSubscriptions()
+        protected override IDisposable CreateSubscriptionsCore()
         {
             UpdateOptionsCount();
             UpdateOptionLinkedIndexes();
             UpdateOptionsStatus();
+            return null;
         }
 
 

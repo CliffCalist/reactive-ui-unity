@@ -13,8 +13,8 @@ namespace WhiteArrow.ReactiveUI
         [SerializeField] private Button _btnSwitchType;
 
         [Header("States")]
-        [SerializeField] private TMP_InputField.ContentType _hidedState = TMP_InputField.ContentType.Standard;
-        [SerializeField] private TMP_InputField.ContentType _showedState = TMP_InputField.ContentType.Password;
+        [SerializeField] private TMP_InputField.ContentType _hidedState = TMP_InputField.ContentType.Password;
+        [SerializeField] private TMP_InputField.ContentType _showedState = TMP_InputField.ContentType.Standard;
 
         [Header("Icons")]
         [SerializeField] private Image _imgHideIcon;
@@ -23,21 +23,12 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        private IDisposable _disposable;
-
-
-
-        protected override void CreateSubscriptions()
+        protected override IDisposable CreateSubscriptionsCore()
         {
             SetHideState(true);
 
-            _disposable = _btnSwitchType.OnClickAsObservable()
+            return _btnSwitchType.OnClickAsObservable()
                 .Subscribe(_ => SwitchHideState());
-        }
-
-        protected override void DisposeSubscriptions()
-        {
-            _disposable?.Dispose();
         }
 
 

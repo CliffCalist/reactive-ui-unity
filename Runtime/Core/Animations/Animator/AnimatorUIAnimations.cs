@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public class AnimatorViewAnimations : MonoViewAnimations
+    public class AnimatorUIAnimations : MonoUIAnimations
     {
         [SerializeField] private string _showAnimationName = "show";
         [SerializeField] private string _hideAnimationName = "hide";
@@ -21,10 +21,10 @@ namespace WhiteArrow.ReactiveUI
                 throw new ArgumentNullException(nameof(view));
 
             if (!view.TryGetComponent(out _animator))
-                throw new NullReferenceException($"The {view.name} doesn't have {nameof(Animator)} component for {nameof(AnimatorViewAnimations)}.");
+                throw new NullReferenceException($"The {view.name} doesn't have {nameof(Animator)} component for {nameof(AnimatorUIAnimations)}.");
 
-            if (!view.TryGetComponent(out ObservableViewAnimatorTrigger observableAnimator))
-                observableAnimator = view.gameObject.AddComponent<ObservableViewAnimatorTrigger>();
+            if (!view.TryGetComponent(out ObservableUIAnimatorTrigger observableAnimator))
+                observableAnimator = view.gameObject.AddComponent<ObservableUIAnimatorTrigger>();
 
             var disposableBuilder = new DisposableBuilder();
             observableAnimator.ShowEnded.Subscribe(_ => _showEnded.OnNext(Unit.Default)).AddTo(ref disposableBuilder);
