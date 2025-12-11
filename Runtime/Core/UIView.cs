@@ -1,3 +1,4 @@
+using System;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ namespace WhiteArrow.ReactiveUI
 
         protected GameObject _object;
         protected IViewAnimations _animations { get; private set; }
+        private IDisposable _subscriptions;
 
 
         public bool IsInitializationInProgress { get; private set; }
@@ -146,11 +148,19 @@ namespace WhiteArrow.ReactiveUI
         protected void RecreateSubscriptions()
         {
             DisposeSubscriptions();
-            CreateSubscriptions();
+            _subscriptions = CreateSubscriptionsCore();
         }
 
-        protected virtual void DisposeSubscriptions() { }
-        protected virtual void CreateSubscriptions() { }
+        private void DisposeSubscriptions()
+        {
+            _subscriptions?.Dispose();
+            _subscriptions = null;
+            DisposeSubscriptionsCore();
+        }
+
+        protected virtual void DisposeSubscriptionsCore() { }
+
+        private IDisposable CreateSubscriptionsCore() => null;
 
 
 
