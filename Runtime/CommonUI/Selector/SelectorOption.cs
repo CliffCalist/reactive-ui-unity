@@ -3,34 +3,36 @@ using R3;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public class SelectorOption : UIButton
+    public abstract class SelectorOption<TData> : UIButton
     {
-        protected int _linkedIndex { get; private set; } = -1;
-
-        private readonly Subject<int> _selected = new();
-        public Observable<int> Selected => _selected;
+        private TData _item;
 
 
 
+        public TData Item => _item;
 
-        public void SetLinkedIndex(int index)
+
+        private readonly Subject<Unit> _clicked = new();
+        public Observable<Unit> Clicked => _clicked;
+
+
+
+
+        public void Bind(TData item)
         {
-            if (index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
-
-            _linkedIndex = index;
+            _item = item ?? throw new ArgumentNullException(nameof(item));
             RecreateSubscriptionsIfVisible();
         }
 
 
         protected override sealed void OnClicked()
         {
-            _selected.OnNext(_linkedIndex);
+            _clicked.OnNext(Unit.Default);
         }
 
 
 
-        public virtual void SetSelectedStatus(bool isSelected)
+        public virtual void OnSelectionChanged(bool isSelected)
         { }
     }
 }

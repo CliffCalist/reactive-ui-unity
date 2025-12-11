@@ -4,85 +4,102 @@ using R3;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public abstract class Selector<T> : UIView
-        where T : SelectorOption
+    public abstract class Selector<TData, TOption> : UIView
+        where TOption : SelectorOption<TData>
     {
-        private IDisposable _optionsSubscription;
-        private readonly List<T> _options = new();
-        protected readonly ReactiveProperty<int> _selectedIndex = new(-1);
+        private List<TOption> _options;
+        private readonly ReactiveProperty<Selection<TData>> _currentSelection = new(null);
+        private readonly ReactiveProperty<Selection<TData>> _confirmedSelection = new(null);
 
 
 
-        protected abstract ISelectorOptionsSynchronizer<T> _optionsSynchronizer { get; }
+        public abstract bool UseAutoConfirm { get; }
 
         public int OptionsCount => _options.Count;
-        public IReadOnlyList<T> Options => _options;
+        public IReadOnlyList<TOption> Options => _options;
+        public ReadOnlyReactiveProperty<Selection<TData>> CurrentSelection => _currentSelection;
+        public ReadOnlyReactiveProperty<Selection<TData>> ConfirmedSelection => _confirmedSelection;
 
-        public ReadOnlyReactiveProperty<int> SelectedIndex => _selectedIndex;
 
 
 
         protected override IDisposable CreateSubscriptionsCore()
         {
-            UpdateOptionsCount();
-            UpdateOptionLinkedIndexes();
-            UpdateOptionsStatus();
-            return null;
-        }
-
-
-
-        private void UpdateOptionsCount()
-        {
-            if (_optionsSynchronizer == null)
-                throw new InvalidOperationException("Options provider cannot be null.");
-
-            _optionsSynchronizer.SyncTo(_options);
+            _options = BuildOptions();
 
             var subscriptionBuilder = new DisposableBuilder();
-            foreach (var option in _options)
+            for (var x = 0; x < _options.Count; x++)
             {
-                option.Selected
-                    .Subscribe(SelectOption)
+                var option = _options[x];
+                option.Clicked
+                    .Subscribe(_ => SelectOption(x))
                     .AddTo(ref subscriptionBuilder);
             }
 
-            _optionsSubscription?.Dispose();
-            _optionsSubscription = subscriptionBuilder.Build();
+            UpdateOptionsStatus();
+            return subscriptionBuilder.Build(); ;
         }
 
+        protected abstract List<TOption> BuildOptions();
 
 
-        private void UpdateOptionLinkedIndexes()
+
+        public void SelectOption(TData item)
         {
-            for (int i = 0; i < _options.Count; i++)
-                _options[i].SetLinkedIndex(i);
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            var index = _options.FindIndex(o => o.Item.Equals(item));
+
+            if (index >= 0)
+                SelectOption(index);
+            else throw new ArgumentException("Item is not part of this selector.", nameof(item));
         }
-
-        private void UpdateOptionsStatus()
-        {
-            for (int i = 0; i < _options.Count; i++)
-            {
-                var option = _options[i];
-                option.SetSelectedStatus(i == _selectedIndex.CurrentValue);
-            }
-        }
-
-
 
         public void SelectOption(int index)
         {
             if (index < 0 || index >= _options.Count)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            _selectedIndex.Value = index;
-            OnOptionSelected(index);
+            var option = _options[index];
+            var selection = new Selection<TData>(index, option.Item);
+            _currentSelection.Value = selection;
+            OnSelected(selection);
 
             if (IsSelfShowed.CurrentValue)
                 UpdateOptionsStatus();
+
+            if (UseAutoConfirm)
+                ConfirmCurrentSelection();
         }
 
-        protected virtual void OnOptionSelected(int index)
+        protected virtual void OnSelected(Selection<TData> selection)
         { }
+
+
+
+        public void ConfirmCurrentSelection()
+        {
+            if (_currentSelection.Value == null)
+                throw new InvalidOperationException("Current selection is null.");
+
+            if (_currentSelection.Value == _confirmedSelection.Value)
+                return;
+
+            _confirmedSelection.Value = _currentSelection.Value;
+            OnSelectionConfirmed(_confirmedSelection.Value);
+        }
+
+        protected virtual void OnSelectionConfirmed(Selection<TData> selection) { }
+
+
+        private void UpdateOptionsStatus()
+        {
+            for (int i = 0; i < _options.Count; i++)
+            {
+                var option = _options[i];
+                option.OnSelectionChanged(i == _currentSelection.CurrentValue.Index);
+            }
+        }
     }
 }
