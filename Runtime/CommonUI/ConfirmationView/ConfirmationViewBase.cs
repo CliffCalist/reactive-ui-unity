@@ -22,7 +22,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected override void BindFromCache()
+        protected override void CreateSubscriptions()
         {
             _isConfirmed = false;
         }

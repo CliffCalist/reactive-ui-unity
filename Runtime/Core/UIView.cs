@@ -134,23 +134,23 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected void RebindIfShowedInHierarchy()
+        protected void RecreateSubscriptionsIfVisible()
         {
             if (_showInHierarchyState.Value == UIViewShowState.Showed ||
                 _showInHierarchyState.Value == UIViewShowState.AnimationEnded)
             {
-                Rebind();
+                RecreateSubscriptions();
             }
         }
 
-        protected void Rebind()
+        protected void RecreateSubscriptions()
         {
-            DisposeBinding();
-            BindFromCache();
+            DisposeSubscriptions();
+            CreateSubscriptions();
         }
 
-        protected virtual void DisposeBinding() { }
-        protected virtual void BindFromCache() { }
+        protected virtual void DisposeSubscriptions() { }
+        protected virtual void CreateSubscriptions() { }
 
 
 
@@ -188,7 +188,7 @@ namespace WhiteArrow.ReactiveUI
                 _showInHierarchyState.Value = UIViewShowState.AnimationEnded;
             }
 
-            Rebind();
+            RecreateSubscriptions();
             OnShowed();
         }
 
@@ -237,7 +237,7 @@ namespace WhiteArrow.ReactiveUI
             _isInHierarchyShowed.Value = false;
             _hideInHierarchyState.Value = UIViewHideState.Hided;
 
-            DisposeBinding();
+            DisposeSubscriptions();
             OnHided();
         }
 
@@ -247,7 +247,7 @@ namespace WhiteArrow.ReactiveUI
 
         private void OnDestroy()
         {
-            DisposeBinding();
+            DisposeSubscriptions();
             OnDestroyCore();
         }
 

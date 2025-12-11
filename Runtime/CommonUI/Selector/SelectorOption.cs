@@ -19,7 +19,7 @@ namespace WhiteArrow.ReactiveUI
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             _linkedIndex = index;
-            RebindIfShowedInHierarchy();
+            RecreateSubscriptionsIfVisible();
         }
 
 

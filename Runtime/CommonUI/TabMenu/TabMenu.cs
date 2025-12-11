@@ -19,9 +19,9 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected override void BindFromCache()
+        protected override void CreateSubscriptions()
         {
-            base.BindFromCache();
+            base.CreateSubscriptions();
             SelectOption(_initTabIndex);
 
             var disposablesBuilder = new DisposableBuilder();
@@ -40,7 +40,7 @@ namespace WhiteArrow.ReactiveUI
             _disposables = disposablesBuilder.Build();
         }
 
-        protected override void DisposeBinding()
+        protected override void DisposeSubscriptions()
         {
             _disposables?.Dispose();
             _disposables = null;

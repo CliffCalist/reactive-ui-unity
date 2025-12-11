@@ -16,7 +16,7 @@ namespace WhiteArrow.ReactiveUI.Auth
         public void Bind(Action<bool> callback)
         {
             _callback = callback ?? throw new ArgumentNullException(nameof(callback));
-            RebindIfShowedInHierarchy();
+            RecreateSubscriptionsIfVisible();
         }
 
 

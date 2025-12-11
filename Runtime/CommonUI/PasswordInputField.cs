@@ -27,7 +27,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected override void BindFromCache()
+        protected override void CreateSubscriptions()
         {
             SetHideState(true);
 
@@ -35,7 +35,7 @@ namespace WhiteArrow.ReactiveUI
                 .Subscribe(_ => SwitchHideState());
         }
 
-        protected override void DisposeBinding()
+        protected override void DisposeSubscriptions()
         {
             _disposable?.Dispose();
         }

@@ -11,7 +11,7 @@ namespace WhiteArrow.ReactiveUI
         public void Bind(Action<bool> onChoiceMade)
         {
             _onChoiceMade = onChoiceMade ?? throw new ArgumentNullException(nameof(onChoiceMade));
-            RebindIfShowedInHierarchy();
+            RecreateSubscriptionsIfVisible();
         }
 
 

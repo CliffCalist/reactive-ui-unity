@@ -21,7 +21,7 @@ namespace WhiteArrow.ReactiveUI.Auth
 
 
 
-        protected override sealed void BindFromCache()
+        protected override sealed void CreateSubscriptions()
         {
             _errorObject?.SetActive(false);
 
@@ -37,7 +37,7 @@ namespace WhiteArrow.ReactiveUI.Auth
                 .Subscribe(_ => OnConfirmPressed());
         }
 
-        protected override sealed void DisposeBinding()
+        protected override sealed void DisposeSubscriptions()
         {
             _disposable?.Dispose();
         }
