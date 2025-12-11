@@ -11,15 +11,19 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected GameObject _object;
-        protected IViewAnimations _animations { get; private set; }
-        private IDisposable _subscriptions;
-
-
         public bool IsInitializationInProgress { get; private set; }
         public bool IsInitialized { get; private set; }
 
+
+        protected GameObject _object { get; private set; }
+        private bool _isSelfHideRequested;
+
+        protected IViewAnimations _animations { get; private set; }
         private bool _skipAnimationsOnce;
+
+        private IDisposable _subscriptions;
+
+
 
         public bool IsAnimationsEnabled
         {
@@ -31,7 +35,7 @@ namespace WhiteArrow.ReactiveUI
         }
 
 
-        private bool _isSelfHideRequested;
+
         private readonly ReactiveProperty<bool> _isSelfShowed = new();
         public ReadOnlyReactiveProperty<bool> IsSelfShowed
         {
@@ -94,7 +98,7 @@ namespace WhiteArrow.ReactiveUI
         }
 
 
-
+        #region Initialization
         private void Awake()
         {
             InitIfFalse();
@@ -133,9 +137,11 @@ namespace WhiteArrow.ReactiveUI
         }
 
         protected virtual void InitCore() { }
+        #endregion
 
 
 
+        #region Subscriptions
         protected void RecreateSubscriptionsIfVisible()
         {
             if (_showInHierarchyState.Value == UIViewShowState.Showed ||
@@ -161,9 +167,11 @@ namespace WhiteArrow.ReactiveUI
         protected virtual void DisposeSubscriptionsCore() { }
 
         private IDisposable CreateSubscriptionsCore() => null;
+        #endregion
 
 
 
+        #region Show
         public bool Show(bool skipAnimations = false)
         {
             InitIfFalse();
@@ -203,9 +211,11 @@ namespace WhiteArrow.ReactiveUI
         }
 
         protected virtual void OnShowed() { }
+        #endregion
 
 
 
+        #region Hide
         public bool Hide(bool skipAnimations = false)
         {
             InitIfFalse();
@@ -252,9 +262,11 @@ namespace WhiteArrow.ReactiveUI
         }
 
         protected virtual void OnHided() { }
+        #endregion
 
 
 
+        #region Destroy
         private void OnDestroy()
         {
             DisposeSubscriptions();
@@ -262,5 +274,6 @@ namespace WhiteArrow.ReactiveUI
         }
 
         protected virtual void OnDestroyCore() { }
+        #endregion
     }
 }
