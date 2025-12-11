@@ -1,13 +1,12 @@
 # ReactiveUI for Unity
 
-ReactiveUI is a lightweight, modular UI framework for Unity, built around reactive programming and a simple lifecycle abstraction.  
-It allows you to cleanly separate UI from game logic, while still enabling fully dynamic behavior.
+ReactiveUI is a lightweight, modular UI framework for Unity, built around reactive programming and a simple lifecycle abstraction. It allows you to cleanly separate UI from game logic, while still enabling fully dynamic behavior.
 
 ## Features
 
 1. Subscribe-and-react approach instead of imperative control
 2. One base class — `UIView` — for all visual components
-3. Self-managed lifecycle for reliable binding/unbinding
+3. Self-managed lifecycle for reliable subscribe/unsubscribe
 4. Built-in animation pipeline supporting Animator, DoTween, and custom solutions
 5. Built-in UI elements like reactive buttons, selectors, menu bars, etc.
 6. Scales well from quick prototyping to complex applications
@@ -30,19 +29,19 @@ To install via UPM, use **"Install package from git URL"** and add the following
 ### UIView Basics
 
 - `UIView` is not abstract and not generic — you can add it directly to any `GameObject` without inheritance.
-- If the view doesn’t bind to game logic and just needs show/hide behavior (with optional animation), this is the quickest way to get started.
-- Optionally assign `_btnHide` in the inspector to allow the view to close itself via a button.
+- If the `UIView` doesn’t bind to game logic and just needs show/hide behavior (with optional animation), this is the quickest way to get started.
+- Optionally assign `_btnHide` in the inspector to allow the `UIView` to close itself via a button.
 - If your `UIView` needs initialization (e.g. resolving components, caching references), override `InitCore()`.  
   It is guaranteed to be called before any logic is executed — even if the view starts inactive.
 - If you need to ensure initialization in an edge case, you can call `InitIfFalse()` manually.
 
 Example:
 ```csharp
-_myView.Show();
-_myView.Hide();
+_myUI.Show();
+_myUI.Hide();
 
-_myView.ShowInHierarchyState
-    .Where(state => state == UIViewShowState.AnimationEnded)
+_myUI.ShowInHierarchyState
+    .Where(state => state == UIShowState.AnimationEnded)
     .Subscribe(_ =>
     {
         // Fully visible
@@ -59,15 +58,14 @@ When your UI reflects some external state, inherit from `UIView` and define your
 
 - Use a method called `Bind(...)` to accept and cache the binding context.
 - This does **not** bind immediately — it's only a caching step.
-- Always call `RebindIfShowedInHierarchy()` after assigning new data. It will bind now if visible, or wait until shown.
-- Do actual subscription logic in `BindFromCache()`.
-- Cleanup subscriptions or listeners in `DisposeBinding()`. This method is called on hide, rebind, or destroy.
+- Always call `RecreateSubscriptionsIfVisible()` after assigning new data. It will create subscriptions now if visible, or wait until shown.
+- Do actual subscription logic in `CreateSubscriptionsCore()`.
+- Cleanup subscriptions or listeners in `DisposeSubscriptionsCore()`. This method is called on hide, recreate subscriptions, or destroy.
 
 Example:
 ```csharp
-public class MyView : UIView
+public class MyUI : UIView
 {
-    private IDisposable _hpSubscription;
     private PlayerStats _playerStats;
 
     protected override void InitCore()
@@ -78,30 +76,24 @@ public class MyView : UIView
     public void Bind(PlayerStats stats)
     {
         _playerStats = stats;
-        RebindIfShowedInHierarchy();
+        RecreateSubscriptionsIfVisible();
     }
 
-    protected override void BindFromCache()
+    protected override IDisposable CreateSubscriptionsCore()
     {
         if (_playerStats == null)
             return;
 
-        _hpSubscription = _playerStats.HP
+        return _playerStats.HP
             .Subscribe(UpdateHPBar);
     }
 
-    protected override void DisposeBinding()
-    {
-        _hpSubscription?.Dispose();
-        _hpSubscription = null;
-    }
-
-    protected override void OnShowed()
+    protected override void OnShowedCore()
     {
         // Runs after Show() completes (including animation)
     }
 
-    protected override void OnHided()
+    protected override void OnHidedCore()
     {
         // Runs after Hide() completes
     }
@@ -128,9 +120,9 @@ These are `ReactiveProperty<T>`, so you can `.Subscribe(...)` or `.Value`.
 
 ## Animations
 
-You can attach animations to a view by either:
-- Assigning it in code with `view.SetAnimations(...)`
-- Attaching a `MonoBehaviour` component that implements `IViewAnimations` to the same GameObject
+You can attach animations to a `UIView` by either:
+- Assigning it in code with `myUi.SetAnimations(...)`
+- Attaching a `MonoBehaviour` component that implements `IUIAnimations` to the same GameObject
 
 The system will:
 - Automatically call `PlayShow()` / `PlayHide()` when appropriate
@@ -145,8 +137,8 @@ ReactiveUI includes two helper bases:
 
 | Class                | Use Case |
 |---------------------|----------|
-| `ViewAnimations`     | Pure C# without MonoBehaviour |
-| `MonoViewAnimations` | Unity components with inspector support |
+| `UIAnimations`     | Pure C# without MonoBehaviour |
+| `MonoUIAnimations` | Unity components with inspector support |
 
 Both provide:
 - `Init()` lifecycle hook
@@ -156,11 +148,11 @@ Both provide:
 
 **Example:**
 ```csharp
-public class ScalePop : MonoViewAnimations
+public class ScalePop : MonoUIAnimations
 {
     [SerializeField] private Transform _target;
 
-    protected override void InitCore(UIView view)
+    protected override void InitCore(UIView ui)
     {
         _target.localScale = Vector3.zero;
     }
@@ -179,14 +171,14 @@ public class ScalePop : MonoViewAnimations
 }
 ```
 
-All `MonoViewAnimations` include inspector buttons for testing `Show()` and `Hide()` animations.
+All `MonoUIAnimations` include inspector buttons for testing `Show()` and `Hide()` animations.
 
 ---
 
 ### Built-in Implementations
 
-- `AnimatorViewAnimations` — integrates with Unity `Animator`
-    - Uses `ObservableViewAnimatorTrigger`
+- `AnimatorUIAnimations` — integrates with Unity `Animator`
+    - Uses `ObservableUIAnimatorTrigger`
     - You must place animation events in clips to call:
         - `OnAnimationShowEnded()`
         - `OnAnimationCloseEnded()`
@@ -214,14 +206,14 @@ _btn.OnClickAsObservable()
 
 **Combine multiple streams:**
 ```csharp
-Observable.CombineLatest(_hp, _mana, (hp, mana) => hp + mana)
-    .Subscribe(UpdateResourceBar);
+Observable.CombineLatest(_armor, _hp, (_armor, _hp) => _armor + _hp)
+    .Subscribe(_ => UpdateHealthBar());
 ```
 
 **Manual dispose via lifecycle:**
 ```csharp
 _inventory.Updated
-    .Subscribe(UpdateView)
+    .Subscribe(UpdateCounters)
     .AddTo(_disposables);
 ```
 
@@ -229,8 +221,8 @@ _inventory.Updated
 ```csharp
 Observable
     .FromEvent(
-        h => Test += h,
-        h => Test -= h
+        h => _player.HeathChanged += h,
+        h => _player.HeathChanged -= h
     )
     .Subscribe(_ => UpdateHealthBar());
 ```
@@ -239,29 +231,23 @@ Observable
 
 ## Built-in Tools
 
-1. `ViewVisibilityTracker` — track show/hide status of multiple views
+1. `UIVisibilityTracker` — track show/hide status of multiple `UIView`
 
 ## Built-in UI Elements
 
-1. `ViewButton` — reactive button with event streams
-2. `ShowViewButton` — triggers `Show()` on assigned view
-3. `HideViewButton` — triggers `Hide()` on assigned view
+1. `UIButton` — reactive button with event streams
+2. `ShowUIButton` — triggers `Show()` on assigned `UIView`
+3. `HideUIwButton` — triggers `Hide()` on assigned `UIView`
 4. `Selector` / `SelectorOption` — toggle group with single active option
-5. `TabMenu` — selector for switching between views
+5. `TabMenu` — selector for switching between `UIView`
 6. `ConfirmationPopUp` — confirmation dialog pop-up
 
 ---
 
 ## Roadmap
 
-- [ ] Automatic subscription disposal inside `UIView`
-- [ ] Optional blocker (click-through prevention)
-- [ ] Optional canvas splitting support
+- [x] Automatic subscription disposal inside `UIView`
 - [ ] Tools:
   - [ ] Optimized element spawner: reuse, create, destroy, and rebind efficiently
 - [ ] UI Components:
-  - [ ] View-switcher button
-  - [ ] Reactive layout groups
-  - [ ] Reactive toggles
-  - [ ] Reactive sliders
-  - [ ] Optimized `ScrollRect` for large lists
+  - [x] View-switcher button
