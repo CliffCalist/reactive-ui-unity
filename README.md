@@ -227,50 +227,11 @@ All `MonoUIAnimations` include inspector buttons for testing `Show()` and `Hide(
 
 ---
 
-## Reactive Patterns
-
-ReactiveUI is built on top of [R3](https://github.com/neuecc/R3) — a modern, fast reactive library for Unity.  
-We don’t use R3 for multithreading — but rather for its safe, declarative, event-driven API.
-
-It gives you powerful tools to react to data and manage subscriptions with minimal boilerplate.
-
-### Examples
-
-**Subscribe once:**
-```csharp
-_btn.OnClickAsObservable()
-    .Take(1)
-    .Subscribe(_ => StartTutorial());
-```
-
-**Combine multiple streams:**
-```csharp
-Observable.CombineLatest(_armor, _hp, (_armor, _hp) => _armor + _hp)
-    .Subscribe(_ => UpdateHealthBar());
-```
-
-**Manual dispose via lifecycle:**
-```csharp
-_inventory.Updated
-    .Subscribe(UpdateCounters)
-    .AddTo(_disposables);
-```
-
-**From business logic event to observable:**
-```csharp
-Observable
-    .FromEvent(
-        h => _player.HeathChanged += h,
-        h => _player.HeathChanged -= h
-    )
-    .Subscribe(_ => UpdateHealthBar());
-```
-
----
-
 ## Built-in Tools
 
 1. `UIVisibilityTracker` — track show/hide status of multiple `UIView`
+2. `UIUtilities` — static helper utilities for common UI operations  
+   - **RebuildList** — efficiently creates, removes, and updates UI elements based on a data collection
 
 ## Built-in UI Elements
 
@@ -312,6 +273,47 @@ Observable
 6. **ChangeUserEmailUIBase**
 7. **ChangeUserPasswordUIBase**
 8. **ChangeUserNameUIBase**
+
+---
+
+## Reactive Patterns
+
+ReactiveUI is built on top of [R3](https://github.com/neuecc/R3) — a modern, fast reactive library for Unity.  
+We don’t use R3 for multithreading — but rather for its safe, declarative, event-driven API.
+
+It gives you powerful tools to react to data and manage subscriptions with minimal boilerplate.
+
+### Examples
+
+**Subscribe once:**
+```csharp
+_btn.OnClickAsObservable()
+    .Take(1)
+    .Subscribe(_ => StartTutorial());
+```
+
+**Combine multiple streams:**
+```csharp
+Observable.CombineLatest(_armor, _hp, (_armor, _hp) => _armor + _hp)
+    .Subscribe(_ => UpdateHealthBar());
+```
+
+**Manual dispose via lifecycle:**
+```csharp
+_inventory.Updated
+    .Subscribe(UpdateCounters)
+    .AddTo(_disposables);
+```
+
+**From business logic event to observable:**
+```csharp
+Observable
+    .FromEvent(
+        h => _player.HeathChanged += h,
+        h => _player.HeathChanged -= h
+    )
+    .Subscribe(_ => UpdateHealthBar());
+```
 
 ---
 
