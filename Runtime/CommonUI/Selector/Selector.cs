@@ -30,9 +30,11 @@ namespace WhiteArrow.ReactiveUI
             var subscriptionBuilder = new DisposableBuilder();
             for (var x = 0; x < _options.Count; x++)
             {
-                var option = _options[x];
+                var index = x;
+                var option = _options[index];
+
                 option.Clicked
-                    .Subscribe(_ => SelectOption(x))
+                    .Subscribe(_ => SelectOption(index))
                     .AddTo(ref subscriptionBuilder);
             }
 
