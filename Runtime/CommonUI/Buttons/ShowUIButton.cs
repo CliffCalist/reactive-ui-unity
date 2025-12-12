@@ -1,17 +1,19 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WhiteArrow.ReactiveUI
 {
     public class ShowUIButton : UIButton
     {
-        [SerializeField] private UIView _ui;
+        [FormerlySerializedAs("_view")]
+        [SerializeField] private UIView _uiView;
 
 
 
         protected override void OnClicked()
         {
-            if (!_ui.IsSelfShowed.CurrentValue)
-                _ui.Show();
+            if (!_uiView.IsSelfShowed.CurrentValue)
+                _uiView.Show();
         }
     }
 }
