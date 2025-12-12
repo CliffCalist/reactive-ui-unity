@@ -95,10 +95,15 @@ namespace WhiteArrow.ReactiveUI
 
         private void UpdateOptionsStatus()
         {
+            var isSelectionExist = _currentSelection.CurrentValue != null;
+
             for (int i = 0; i < _options.Count; i++)
             {
                 var option = _options[i];
-                option.OnSelectionChanged(i == _currentSelection.CurrentValue.Index);
+                option.OnSelectionChanged(isSelectionExist ?
+                    i == _currentSelection.CurrentValue.Index :
+                    false
+                );
             }
         }
     }
