@@ -19,10 +19,18 @@ namespace WhiteArrow.ReactiveUI
             if (create == null)
             {
                 if (config.Prefab == null)
+                {
                     throw new InvalidOperationException(
                         "UIListRebuildConfig requires either Create callback or Prefab.");
+                }
 
-                create = () => UnityEngine.Object.Instantiate(config.Prefab);
+                if (config.Parent == null)
+                {
+                    throw new InvalidOperationException(
+                        "UIListRebuildConfig requires either Create callback or Parent.");
+                }
+
+                create = () => UnityEngine.Object.Instantiate(config.Prefab, config.Parent);
             }
 
             // DESTROY
