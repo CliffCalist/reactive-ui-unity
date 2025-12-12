@@ -295,7 +295,7 @@ _btn.OnClickAsObservable()
 **Combine multiple streams:**
 ```csharp
 Observable.CombineLatest(_armor, _hp, (_armor, _hp) => _armor + _hp)
-    .Subscribe(_ => UpdateHealthBar());
+    .Subscribe(totalHp => UpdateHealthBar(totalHp));
 ```
 
 **Manual dispose via lifecycle:**
@@ -321,6 +321,6 @@ Observable
 
 - [x] Automatic subscription disposal inside `UIView`
 - [ ] Tools:
-  - [ ] Optimized element spawner: reuse, create, destroy, and rebind efficiently
+  - [x] Optimized element spawner: reuse, create, destroy, and rebind efficiently
 - [ ] UI Components:
   - [x] View-switcher button
