@@ -1,6 +1,7 @@
 using System;
 using R3;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace WhiteArrow.ReactiveUI
@@ -8,6 +9,8 @@ namespace WhiteArrow.ReactiveUI
     public class UIView : MonoBehaviour
     {
         [SerializeField] private Button _btnHide;
+        [SerializeField] private Selectable _defaultFocusOnShow;
+        [SerializeField] private Selectable _defaultFocusOnHide;
 
 
 
@@ -194,6 +197,9 @@ namespace WhiteArrow.ReactiveUI
         {
             InitIfFalse();
 
+            if (_defaultFocusOnShow != null && EventSystem.current != null)
+                EventSystem.current.SetSelectedGameObject(_defaultFocusOnShow.gameObject);
+
             _hideInHierarchyState.Value = UIHideState.None;
             _isInHierarchyShowed.Value = true;
             _showInHierarchyState.Value = UIShowState.Showed;
@@ -246,6 +252,9 @@ namespace WhiteArrow.ReactiveUI
         {
             InitIfFalse();
             _skipAnimationsOnce = false;
+
+            if (_defaultFocusOnHide != null && EventSystem.current != null)
+                EventSystem.current.SetSelectedGameObject(_defaultFocusOnHide.gameObject);
 
             if (_isSelfHideRequested)
             {

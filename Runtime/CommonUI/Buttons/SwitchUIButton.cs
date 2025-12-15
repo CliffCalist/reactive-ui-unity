@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace WhiteArrow.ReactiveUI.Auth
 {
@@ -11,12 +13,17 @@ namespace WhiteArrow.ReactiveUI.Auth
         [FormerlySerializedAs("_showView")]
         [SerializeField] private UIView _uiViewForShow;
 
+        [SerializeField] private Selectable _focusObject;
+
 
 
         protected override void OnClicked()
         {
-            _uiViewForHide?.Hide();
-            _uiViewForShow?.Show();
+            _uiViewForHide.Hide();
+            _uiViewForShow.Show();
+
+            if (_focusObject != null && EventSystem.current != null)
+                EventSystem.current.SetSelectedGameObject(_focusObject.gameObject);
         }
     }
 }
