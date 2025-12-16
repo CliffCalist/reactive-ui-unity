@@ -28,6 +28,9 @@ namespace WhiteArrow.ReactiveUI
 
 
 
+        public Selectable HideSelectable => _btnHide;
+
+
         public bool IsAnimationsEnabled
         {
             get
