@@ -7,7 +7,7 @@ namespace WhiteArrow.ReactiveUI
     public abstract class Selector<TData, TOption> : UIView
         where TOption : SelectorOption<TData>
     {
-        private List<TOption> _options;
+        private List<TOption> _options = new();
         private readonly ReactiveProperty<Selection<TData>> _currentSelection = new(null);
         private readonly ReactiveProperty<Selection<TData>> _confirmedSelection = new(null);
 
@@ -26,6 +26,8 @@ namespace WhiteArrow.ReactiveUI
         protected override IDisposable CreateSubscriptionsCore()
         {
             _options = BuildOptions();
+            if (_options == null)
+                throw new InvalidOperationException("Options is null.");
 
             var subscriptionBuilder = new DisposableBuilder();
             for (var x = 0; x < _options.Count; x++)
