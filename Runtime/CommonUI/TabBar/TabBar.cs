@@ -18,7 +18,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        protected override sealed List<SelectorOption<UIView>> BuildOptions()
+        protected override sealed List<SelectorOption<UIView>> BuildOptions(List<SelectorOption<UIView>> currentOptions)
         {
             return _tabs.Select(entry =>
             {
