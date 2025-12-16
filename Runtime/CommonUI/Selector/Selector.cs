@@ -25,9 +25,8 @@ namespace WhiteArrow.ReactiveUI
 
         protected override IDisposable CreateSubscriptionsCore()
         {
-            _options = BuildOptions();
-            if (_options == null)
-                throw new InvalidOperationException("Options is null.");
+            _options = BuildOptions(_options)
+                ?? throw new InvalidOperationException("BuildOptions returned null.");
 
             var subscriptionBuilder = new DisposableBuilder();
             for (var x = 0; x < _options.Count; x++)
@@ -44,7 +43,7 @@ namespace WhiteArrow.ReactiveUI
             return subscriptionBuilder.Build(); ;
         }
 
-        protected abstract List<TOption> BuildOptions();
+        protected abstract List<TOption> BuildOptions(List<TOption> currentOptions);
 
 
 
