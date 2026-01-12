@@ -22,6 +22,8 @@ namespace WhiteArrow.ReactiveUI.Auth
                     else
                         callback(AuthOperationResult.Fail("Credential confirm failed"));
                 });
+
+                _confirmCredentialUI.Show();
             }
             else
                 PerformChange(callback);
