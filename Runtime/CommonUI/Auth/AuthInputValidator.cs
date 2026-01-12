@@ -9,17 +9,20 @@ namespace WhiteArrow.ReactiveUI.Auth
 
         public static bool IsValidName(string name)
         {
-            return !string.IsNullOrWhiteSpace(name) && name.Length >= MIN_NAME_LENGTH;
+            return !string.IsNullOrEmpty(name) && !string.IsNullOrWhiteSpace(name) &&
+                name.Length >= MIN_NAME_LENGTH;
         }
 
         public static bool IsValidEmail(string email)
         {
-            return !string.IsNullOrWhiteSpace(email) && email.Contains("@");
+            return !string.IsNullOrEmpty(email) && !string.IsNullOrWhiteSpace(email) &&
+                email.Contains("@");
         }
 
         public static bool IsValidPassword(string password)
         {
-            return !string.IsNullOrWhiteSpace(password) && password.Length >= MIN_PASSWORD_LENGTH;
+            return !string.IsNullOrEmpty(password) && !string.IsNullOrWhiteSpace(password) &&
+                password.Length >= MIN_PASSWORD_LENGTH;
         }
 
         public static bool IsValidPassword(string password, string confirmPassword)
