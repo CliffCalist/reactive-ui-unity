@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public sealed class UIListRebuildConfig<TData, TUIElement>
+    public sealed class UIListRebuilderConfig<TData, TUIElement>
     where TUIElement : Component
     {
         /// <summary>Prefab used when Create is not provided.</summary>

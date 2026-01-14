@@ -1,60 +1,30 @@
-using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace WhiteArrow.ReactiveUI
 {
     public static class UIUtilities
     {
-        public static void RebuildList<TData, TUIElement>(
-            IList<TData> source,
-            IList<TUIElement> uiSource,
-            UIListRebuildConfig<TData, TUIElement> config)
-            where TUIElement : UnityEngine.Component
+        public static void RebuildList<TData, TElement>(
+            IList<TData> dataSource,
+            IList<TElement> elementsSource,
+            UIListRebuilderConfig<TData, TElement> config)
+            where TElement : Component
         {
-            if (config == null)
-                throw new ArgumentNullException(nameof(config));
+            var rebuilder = new UIListRebuilder<TData, TElement>(dataSource, elementsSource, config);
+            rebuilder.Rebuild();
+        }
 
-            // CREATE
-            var create = config.Create;
-            if (create == null)
-            {
-                if (config.Prefab == null)
-                {
-                    throw new InvalidOperationException(
-                        "UIListRebuildConfig requires either Create callback or Prefab.");
-                }
 
-                if (config.Parent == null)
-                {
-                    throw new InvalidOperationException(
-                        "UIListRebuildConfig requires either Create callback or Parent.");
-                }
 
-                create = () => UnityEngine.Object.Instantiate(config.Prefab, config.Parent);
-            }
-
-            // DESTROY
-            Action<TUIElement> destroy =
-                config.Destroy ?? (elem => UnityEngine.Object.Destroy(elem.gameObject));
-
-            // ===== REMOVE EXTRA =====
-            while (uiSource.Count > source.Count)
-            {
-                var last = uiSource[^1];
-                uiSource.RemoveAt(uiSource.Count - 1);
-                destroy(last);
-            }
-
-            // ===== ADD MISSING =====
-            while (uiSource.Count < source.Count)
-                uiSource.Add(create());
-
-            // ===== BIND (optional) =====
-            if (config.Bind != null)
-            {
-                for (int i = 0; i < source.Count; i++)
-                    config.Bind(uiSource[i], i, source[i]);
-            }
+        public static void RebuildGrid<TData, TElement>(
+            IList<TData> dataSource,
+            UIGrid<TElement> grid,
+            UIGridRebuilderConfig<TData, TElement> config)
+            where TElement : Component
+        {
+            var rebuilder = new UIGridRebuilder<TData, TElement>(dataSource, grid, config);
+            rebuilder.Rebuild();
         }
     }
 }
