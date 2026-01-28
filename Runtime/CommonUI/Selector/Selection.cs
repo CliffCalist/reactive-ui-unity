@@ -1,9 +1,10 @@
 namespace WhiteArrow.ReactiveUI
 {
-    public class Selection<TData>
+    public class Selection<TData> : ISelection
     {
         public int Index { get; }
         public TData Item { get; }
+        object ISelection.UntypedItem => Item;
 
 
 

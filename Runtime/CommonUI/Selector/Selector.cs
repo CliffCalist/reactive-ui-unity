@@ -4,24 +4,59 @@ using R3;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public abstract class Selector<TData, TOption> : UIView
+    public abstract class Selector : UIView
+    {
+        public abstract bool UseAutoConfirm { get; }
+        public abstract int OptionsCount { get; }
+
+        public abstract IReadOnlyList<SelectorOption> UntypedOptions { get; }
+        public abstract ReadOnlyReactiveProperty<ISelection> UntypedCurrentSelection { get; }
+        public abstract ReadOnlyReactiveProperty<ISelection> UntypedConfirmedSelection { get; }
+
+
+
+        public abstract void SelectOption(int index);
+        public abstract void ConfirmCurrentSelection();
+    }
+
+
+
+    public abstract class Selector<TData, TOption> : Selector
         where TOption : SelectorOption<TData>
     {
         private List<TOption> _options = new();
+
         private readonly ReactiveProperty<Selection<TData>> _currentSelection = new(null);
+        private ReadOnlyReactiveProperty<ISelection> _untypedCurrentSelection;
+
         private readonly ReactiveProperty<Selection<TData>> _confirmedSelection = new(null);
+        private ReadOnlyReactiveProperty<ISelection> _untypedConfirmedSelection;
 
 
 
-        public abstract bool UseAutoConfirm { get; }
-
-        public int OptionsCount => _options.Count;
+        public override sealed int OptionsCount => _options.Count;
         public IReadOnlyList<TOption> Options => _options;
+
+        public override sealed IReadOnlyList<SelectorOption> UntypedOptions => _options;
+
         public ReadOnlyReactiveProperty<Selection<TData>> CurrentSelection => _currentSelection;
+        public override sealed ReadOnlyReactiveProperty<ISelection> UntypedCurrentSelection => _untypedCurrentSelection;
+
         public ReadOnlyReactiveProperty<Selection<TData>> ConfirmedSelection => _confirmedSelection;
+        public override sealed ReadOnlyReactiveProperty<ISelection> UntypedConfirmedSelection => _untypedConfirmedSelection;
 
 
 
+        protected override void InitCore()
+        {
+            _untypedCurrentSelection = _currentSelection
+                .Select(v => (ISelection)v)
+                .ToReadOnlyReactiveProperty();
+
+            _untypedConfirmedSelection = _confirmedSelection
+                .Select(v => (ISelection)v)
+                .ToReadOnlyReactiveProperty();
+        }
 
         protected override IDisposable CreateSubscriptionsCore()
         {
@@ -59,7 +94,7 @@ namespace WhiteArrow.ReactiveUI
             else throw new ArgumentException("Item is not part of this selector.", nameof(item));
         }
 
-        public void SelectOption(int index)
+        public override sealed void SelectOption(int index)
         {
             if (index < 0 || index >= _options.Count)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -81,7 +116,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        public void ConfirmCurrentSelection()
+        public override sealed void ConfirmCurrentSelection()
         {
             if (_currentSelection.Value == null)
                 throw new InvalidOperationException("Current selection is null.");

@@ -3,26 +3,15 @@ using R3;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public abstract class SelectorOption<TData> : UIButton
+    public abstract class SelectorOption : UIButton
     {
-        private TData _item;
+        public abstract object UntypedItem { get; }
 
-
-
-        public TData Item => _item;
 
 
         private readonly Subject<Unit> _clicked = new();
         public Observable<Unit> Clicked => _clicked;
 
-
-
-
-        public void Bind(TData item)
-        {
-            _item = item ?? throw new ArgumentNullException(nameof(item));
-            RecreateSubscriptionsIfVisible();
-        }
 
 
         protected override sealed void OnClicked()
@@ -34,5 +23,23 @@ namespace WhiteArrow.ReactiveUI
 
         public virtual void OnSelectionChanged(bool isSelected)
         { }
+    }
+
+    public abstract class SelectorOption<TData> : SelectorOption
+    {
+        private TData _item;
+
+
+
+        public TData Item => _item;
+        public override sealed object UntypedItem => _item;
+
+
+
+        public void Bind(TData item)
+        {
+            _item = item ?? throw new ArgumentNullException(nameof(item));
+            RecreateSubscriptionsIfVisible();
+        }
     }
 }
