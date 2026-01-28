@@ -40,10 +40,24 @@ namespace WhiteArrow.ReactiveUI
         public override sealed IReadOnlyList<SelectorOption> UntypedOptions => _options;
 
         public ReadOnlyReactiveProperty<Selection<TData>> CurrentSelection => _currentSelection;
-        public override sealed ReadOnlyReactiveProperty<ISelection> UntypedCurrentSelection => _untypedCurrentSelection;
+        public override sealed ReadOnlyReactiveProperty<ISelection> UntypedCurrentSelection
+        {
+            get
+            {
+                InitIfFalse();
+                return _untypedCurrentSelection;
+            }
+        }
 
         public ReadOnlyReactiveProperty<Selection<TData>> ConfirmedSelection => _confirmedSelection;
-        public override sealed ReadOnlyReactiveProperty<ISelection> UntypedConfirmedSelection => _untypedConfirmedSelection;
+        public override sealed ReadOnlyReactiveProperty<ISelection> UntypedConfirmedSelection
+        {
+            get
+            {
+                InitIfFalse();
+                return _untypedConfirmedSelection;
+            }
+        }
 
 
 
