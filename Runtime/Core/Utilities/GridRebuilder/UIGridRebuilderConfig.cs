@@ -7,7 +7,7 @@ namespace WhiteArrow.ReactiveUI
     {
         // GROUP
         public int ElementsPerGroup;
-        public Transform GroupsRoot;
+        public Transform GroupsContent;
         public Transform GroupPrefab;
         public Func<Transform> CreateGroup;
         public Action<Transform> DestroyGroup;

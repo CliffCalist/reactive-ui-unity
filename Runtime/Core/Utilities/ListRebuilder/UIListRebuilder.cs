@@ -35,13 +35,13 @@ namespace WhiteArrow.ReactiveUI
                             $"{config.GetType().Name} requires either {nameof(config.Create)} callback or {nameof(config.Prefab)}.");
                     }
 
-                    if (config.Parent == null)
+                    if (config.Content == null)
                     {
                         throw new InvalidOperationException(
-                            $"{config.GetType().Name} requires either {nameof(config.Create)} callback or {nameof(config.Parent)}.");
+                            $"{config.GetType().Name} requires either {nameof(config.Create)} callback or {nameof(config.Content)}.");
                     }
 
-                    return Object.Instantiate(config.Prefab, config.Parent);
+                    return Object.Instantiate(config.Prefab, config.Content);
                 };
             }
 

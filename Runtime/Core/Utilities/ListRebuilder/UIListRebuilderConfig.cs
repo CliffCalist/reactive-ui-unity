@@ -9,8 +9,8 @@ namespace WhiteArrow.ReactiveUI
         /// <summary>Prefab used when Create is not provided.</summary>
         public TUIElement Prefab;
 
-        /// <summary>Parent used when Create is not provided.</summary>
-        public Transform Parent;
+        /// <summary>Content used when Create is not provided.</summary>
+        public Transform Content;
 
         /// <summary>Custom creation logic (optional). If null → prefab is instantiated.</summary>
         public Func<TUIElement> Create;

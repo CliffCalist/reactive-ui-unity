@@ -70,14 +70,14 @@ namespace WhiteArrow.ReactiveUI
                         );
                     }
 
-                    if (_config.GroupsRoot == null)
+                    if (_config.GroupsContent == null)
                     {
                         throw new InvalidOperationException(
-                            $"{_config.GetType().Name} requires either {nameof(_config.CreateGroup)} callback or {nameof(_config.GroupsRoot)}."
+                            $"{_config.GetType().Name} requires either {nameof(_config.CreateGroup)} callback or {nameof(_config.GroupsContent)}."
                         );
                     }
 
-                    return Object.Instantiate(_config.GroupPrefab, _config.GroupsRoot);
+                    return Object.Instantiate(_config.GroupPrefab, _config.GroupsContent);
                 };
             }
 
@@ -133,7 +133,7 @@ namespace WhiteArrow.ReactiveUI
 
             Observable.NextFrame()
                 .ObserveOnMainThread()
-                .Subscribe(_ => LayoutRebuilder.MarkLayoutForRebuild(_config.GroupsRoot as RectTransform));
+                .Subscribe(_ => LayoutRebuilder.MarkLayoutForRebuild(_config.GroupsContent as RectTransform));
         }
 
         private void SyncGroups()
