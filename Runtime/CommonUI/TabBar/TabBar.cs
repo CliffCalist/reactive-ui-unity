@@ -48,7 +48,7 @@ namespace WhiteArrow.ReactiveUI
 
         private void OnTabVisibilityChanged(bool isShowed, UIView tab)
         {
-            if (isShowed && CurrentSelection.CurrentValue.Item != tab)
+            if (isShowed && CurrentSelection.CurrentValue?.Item != tab)
             {
                 SelectOption(tab);
                 return;
@@ -69,12 +69,12 @@ namespace WhiteArrow.ReactiveUI
         {
             var selection = ConfirmedSelection.CurrentValue;
 
-            if (selection.Item != null && !selection.Item.IsSelfShowed.CurrentValue)
+            if (selection != null && !selection.Item.IsSelfShowed.CurrentValue)
                 selection.Item.Show();
 
             for (int i = 0; i < _tabs.Count; i++)
             {
-                if (i == selection.Index)
+                if (selection != null && i == selection.Index)
                     continue;
 
                 var tab = _tabs[i].Tab;

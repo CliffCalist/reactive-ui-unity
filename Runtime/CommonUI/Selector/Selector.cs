@@ -16,6 +16,7 @@ namespace WhiteArrow.ReactiveUI
 
 
         public abstract void SelectOption(int index);
+        public abstract void ClearSelection();
         public abstract void ConfirmCurrentSelection();
     }
 
@@ -89,7 +90,7 @@ namespace WhiteArrow.ReactiveUI
             }
 
             UpdateOptionsStatus();
-            return subscriptionBuilder.Build(); ;
+            return subscriptionBuilder.Build();
         }
 
         protected abstract List<TOption> BuildOptions(List<TOption> currentOptions);
@@ -116,7 +117,21 @@ namespace WhiteArrow.ReactiveUI
             var option = _options[index];
             var selection = new Selection<TData>(index, option.Item);
             _currentSelection.Value = selection;
-            OnSelected(selection);
+            OnSelectedInternal();
+        }
+
+        public override sealed void ClearSelection()
+        {
+            if (_currentSelection.Value == null)
+                return;
+
+            _currentSelection.Value = null;
+            OnSelectedInternal();
+        }
+
+        private void OnSelectedInternal()
+        {
+            OnSelected(_currentSelection.Value);
 
             if (IsSelfShowed.CurrentValue)
                 UpdateOptionsStatus();
@@ -143,6 +158,7 @@ namespace WhiteArrow.ReactiveUI
         }
 
         protected virtual void OnSelectionConfirmed(Selection<TData> selection) { }
+
 
 
         private void UpdateOptionsStatus()
