@@ -147,9 +147,6 @@ namespace WhiteArrow.ReactiveUI
 
         public override sealed void ConfirmCurrentSelection()
         {
-            if (_currentSelection.Value == null)
-                throw new InvalidOperationException("Current selection is null.");
-
             if (_currentSelection.Value == _confirmedSelection.Value)
                 return;
 
