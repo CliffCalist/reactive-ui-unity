@@ -110,6 +110,9 @@ namespace WhiteArrow.ReactiveUI
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
+            if (HasSelection.CurrentValue && _currentSelection.Value.Item.Equals(item))
+                return;
+
             var index = _options.FindIndex(o => o.Item.Equals(item));
 
             if (index >= 0)
@@ -121,6 +124,9 @@ namespace WhiteArrow.ReactiveUI
         {
             if (index < 0 || index >= _options.Count)
                 throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (HasSelection.CurrentValue && _currentSelection.Value.Index == index)
+                return;
 
             var option = _options[index];
             var selection = new Selection<TData>(index, option.Item);
@@ -168,12 +174,10 @@ namespace WhiteArrow.ReactiveUI
 
         private void UpdateOptionsStatus()
         {
-            var isSelectionExist = _currentSelection.CurrentValue != null;
-
             for (int i = 0; i < _options.Count; i++)
             {
                 var option = _options[i];
-                option.OnSelectionChanged(isSelectionExist ?
+                option.OnSelectionChanged(HasSelection.CurrentValue ?
                     i == _currentSelection.CurrentValue.Index :
                     false
                 );
