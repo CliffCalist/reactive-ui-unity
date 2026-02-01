@@ -10,6 +10,7 @@ namespace WhiteArrow.ReactiveUI
         public abstract int OptionsCount { get; }
 
         public abstract IReadOnlyList<SelectorOption> UntypedOptions { get; }
+        public abstract ReadOnlyReactiveProperty<bool> HasSelection { get; }
         public abstract ReadOnlyReactiveProperty<ISelection> UntypedCurrentSelection { get; }
         public abstract ReadOnlyReactiveProperty<ISelection> UntypedConfirmedSelection { get; }
 
@@ -27,6 +28,8 @@ namespace WhiteArrow.ReactiveUI
     {
         private List<TOption> _options = new();
 
+        private ReadOnlyReactiveProperty<bool> _hasSelection;
+
         private readonly ReactiveProperty<Selection<TData>> _currentSelection = new(null);
         private ReadOnlyReactiveProperty<ISelection> _untypedCurrentSelection;
 
@@ -39,6 +42,7 @@ namespace WhiteArrow.ReactiveUI
         public IReadOnlyList<TOption> Options => _options;
 
         public override sealed IReadOnlyList<SelectorOption> UntypedOptions => _options;
+        public override sealed ReadOnlyReactiveProperty<bool> HasSelection => _hasSelection;
 
         public ReadOnlyReactiveProperty<Selection<TData>> CurrentSelection => _currentSelection;
         public override sealed ReadOnlyReactiveProperty<ISelection> UntypedCurrentSelection
@@ -64,6 +68,10 @@ namespace WhiteArrow.ReactiveUI
 
         protected override void InitCore()
         {
+            _hasSelection = _currentSelection
+                .Select(v => v != null)
+                .ToReadOnlyReactiveProperty();
+
             _untypedCurrentSelection = _currentSelection
                 .Select(v => (ISelection)v)
                 .ToReadOnlyReactiveProperty();
