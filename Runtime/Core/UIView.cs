@@ -103,6 +103,7 @@ namespace WhiteArrow.ReactiveUI
         }
 
 
+
         #region Initialization
         private void Awake()
         {
@@ -125,6 +126,17 @@ namespace WhiteArrow.ReactiveUI
             _isSelfShowed.Value = _object.activeSelf;
             _isInHierarchyShowed.Value = _object.activeInHierarchy;
 
+            if (_object.activeInHierarchy)
+            {
+                _showInHierarchyState.Value = UIShowState.Showed;
+                _hideInHierarchyState.Value = UIHideState.None;
+            }
+            else
+            {
+                _showInHierarchyState.Value = UIShowState.None;
+                _hideInHierarchyState.Value = UIHideState.Hided;
+            }
+
             if (TryGetComponent(out IUIAnimations animations))
                 SetAnimations(animations);
 
@@ -134,7 +146,6 @@ namespace WhiteArrow.ReactiveUI
                     .Subscribe(_ => Hide())
                     .AddTo(this);
             }
-
 
             InitCore();
             IsInitializationInProgress = false;
