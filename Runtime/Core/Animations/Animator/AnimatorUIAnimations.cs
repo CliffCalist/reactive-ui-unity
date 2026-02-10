@@ -11,7 +11,6 @@ namespace WhiteArrow.ReactiveUI
 
 
         private Animator _animator;
-        private IDisposable _disposable;
 
 
 
@@ -29,10 +28,15 @@ namespace WhiteArrow.ReactiveUI
             var disposableBuilder = new DisposableBuilder();
             observableAnimator.ShowEnded.Subscribe(_ => _showEnded.OnNext(Unit.Default)).AddTo(ref disposableBuilder);
             observableAnimator.HideEnded.Subscribe(_ => _hideEnded.OnNext(Unit.Default)).AddTo(ref disposableBuilder);
-            _disposable = disposableBuilder.Build();
+            disposableBuilder.Build().AddTo(this);
         }
 
 
+
+        protected override void StopAllWithoutNotifyCore()
+        {
+            _animator.StopPlayback();
+        }
 
         protected override void PlayShowCore()
         {
@@ -42,13 +46,6 @@ namespace WhiteArrow.ReactiveUI
         protected override void PlayHideCore()
         {
             _animator.Play(_hideAnimationName);
-        }
-
-
-
-        protected override void DisposeCore()
-        {
-            _disposable?.Dispose();
         }
     }
 }

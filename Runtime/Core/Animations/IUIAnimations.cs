@@ -1,9 +1,8 @@
-using System;
 using R3;
 
 namespace WhiteArrow.ReactiveUI
 {
-    public interface IUIAnimations : IDisposable
+    public interface IUIAnimations
     {
         internal bool IsInitialized { get; }
         bool IsEnabled { get; }
@@ -17,6 +16,6 @@ namespace WhiteArrow.ReactiveUI
 
         internal void PlayShow();
         internal void PlayHide();
-        internal void StopAll();
+        internal void StopAllWithoutNotify();
     }
 }

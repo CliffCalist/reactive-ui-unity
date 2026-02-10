@@ -43,6 +43,16 @@ namespace WhiteArrow.ReactiveUI
 
 
 
+        void IUIAnimations.StopAllWithoutNotify()
+        {
+            ThrowIfNonInitialized();
+            StopAllWithoutNotifyCore();
+        }
+
+        protected abstract void StopAllWithoutNotifyCore();
+
+
+
         void IUIAnimations.PlayShow()
         {
             ThrowIfNonInitialized();
@@ -60,17 +70,6 @@ namespace WhiteArrow.ReactiveUI
         }
 
         protected abstract void PlayHideCore();
-
-
-
-        public void Dispose()
-        {
-            _showEnded.Dispose();
-            _hideEnded.Dispose();
-            DisposeCore();
-        }
-
-        protected virtual void DisposeCore() { }
 
 
 

@@ -21,7 +21,7 @@ namespace WhiteArrow.ReactiveUI
         protected GameObject _object { get; private set; }
 
         private IUIAnimations _animations;
-        private IDisposable _animationsSubscription;
+        private IDisposable _currentAnimationSubscription;
         private bool _useShowAnimationOnEnable;
 
         private IDisposable _subscriptions;
@@ -89,24 +89,14 @@ namespace WhiteArrow.ReactiveUI
         public void SetAnimations(IUIAnimations animations)
         {
             InitIfFalse();
-            _animationsSubscription?.Dispose();
+
+            _currentAnimationSubscription?.Dispose();
+
+            if (_animations != null)
+                _animations.StopAllWithoutNotify();
 
             _animations = animations;
             _animations.Init(this);
-
-            var disposableBuilder = new DisposableBuilder();
-
-            _animations.ShowEnded
-                .Where(_ => IsAnimationsEnabled)
-                .Subscribe(_ => _showInHierarchyState.Value = UIShowState.AnimationEnded)
-                .AddTo(ref disposableBuilder);
-
-            _animations.HideEnded
-                .Where(_ => IsAnimationsEnabled)
-                .Subscribe(_ => SetActiveInternal(false))
-                .AddTo(ref disposableBuilder);
-
-            _animationsSubscription = disposableBuilder.Build();
         }
 
 
@@ -225,13 +215,28 @@ namespace WhiteArrow.ReactiveUI
             _isInHierarchyShowed.Value = true;
             _showInHierarchyState.Value = UIShowState.Showed;
 
+            _currentAnimationSubscription?.Dispose();
+
+            if (_animations != null)
+                _animations.StopAllWithoutNotify();
+
             if (IsAnimationsEnabled && _useShowAnimationOnEnable)
-                _animations.PlayShow();
+                PlayShowAnimation();
             else _showInHierarchyState.Value = UIShowState.AnimationEnded;
 
             _useShowAnimationOnEnable = false;
             RecreateSubscriptions();
             OnShowedCore();
+        }
+
+        private void PlayShowAnimation()
+        {
+            _currentAnimationSubscription = _animations
+                .ShowEnded
+                .Take(1)
+                .Subscribe(_ => _showInHierarchyState.Value = UIShowState.AnimationEnded);
+
+            _animations.PlayShow();
         }
 
         protected virtual void OnShowedCore() { }
@@ -249,12 +254,27 @@ namespace WhiteArrow.ReactiveUI
 
             _hideInHierarchyState.Value = UIHideState.Requested;
 
+
+            _currentAnimationSubscription?.Dispose();
+
+            if (_animations != null)
+                _animations.StopAllWithoutNotify();
+
             if (IsAnimationsEnabled && !skipAnimations && _isInHierarchyShowed.CurrentValue)
-                _animations.PlayHide();
+                PlayHideAnimation();
             else
                 SetActiveInternal(false);
 
             return true;
+        }
+
+        private void PlayHideAnimation()
+        {
+            _currentAnimationSubscription = _animations.HideEnded
+                .Take(1)
+                .Subscribe(_ => SetActiveInternal(false));
+
+            _animations.PlayHide();
         }
 
         private void OnDisable()
@@ -289,7 +309,11 @@ namespace WhiteArrow.ReactiveUI
         #region Destroy
         private void OnDestroy()
         {
-            _animationsSubscription?.Dispose();
+            _currentAnimationSubscription?.Dispose();
+
+            if (_animations != null)
+                _animations.StopAllWithoutNotify();
+
             DisposeSubscriptions();
             OnDestroyCore();
         }
