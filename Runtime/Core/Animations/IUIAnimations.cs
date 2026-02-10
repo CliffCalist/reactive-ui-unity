@@ -17,5 +17,6 @@ namespace WhiteArrow.ReactiveUI
 
         internal void PlayShow();
         internal void PlayHide();
+        internal void StopAll();
     }
 }

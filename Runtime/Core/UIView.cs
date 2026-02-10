@@ -20,7 +20,8 @@ namespace WhiteArrow.ReactiveUI
 
         protected GameObject _object { get; private set; }
 
-        protected IUIAnimations _animations { get; private set; }
+        private IUIAnimations _animations;
+        private IDisposable _animationsSubscription;
         private bool _useShowAnimationOnEnable;
 
         private IDisposable _subscriptions;
@@ -88,18 +89,24 @@ namespace WhiteArrow.ReactiveUI
         public void SetAnimations(IUIAnimations animations)
         {
             InitIfFalse();
+            _animationsSubscription?.Dispose();
+
             _animations = animations;
             _animations.Init(this);
+
+            var disposableBuilder = new DisposableBuilder();
 
             _animations.ShowEnded
                 .Where(_ => IsAnimationsEnabled)
                 .Subscribe(_ => _showInHierarchyState.Value = UIShowState.AnimationEnded)
-                .AddTo(this);
+                .AddTo(ref disposableBuilder);
 
             _animations.HideEnded
                 .Where(_ => IsAnimationsEnabled)
                 .Subscribe(_ => SetActiveInternal(false))
-                .AddTo(this);
+                .AddTo(ref disposableBuilder);
+
+            _animationsSubscription = disposableBuilder.Build();
         }
 
 
@@ -282,6 +289,7 @@ namespace WhiteArrow.ReactiveUI
         #region Destroy
         private void OnDestroy()
         {
+            _animationsSubscription?.Dispose();
             DisposeSubscriptions();
             OnDestroyCore();
         }
