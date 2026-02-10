@@ -21,7 +21,7 @@ namespace WhiteArrow.ReactiveUI
         protected GameObject _object { get; private set; }
 
         protected IUIAnimations _animations { get; private set; }
-        private bool _skipAnimationsOnce;
+        private bool _useShowAnimationOnEnable;
 
         private IDisposable _subscriptions;
 
@@ -197,10 +197,13 @@ namespace WhiteArrow.ReactiveUI
                 return false;
             }
 
-            _skipAnimationsOnce = skipAnimations;
             _showInHierarchyState.Value = UIShowState.Requested;
-            SetActiveInternal(true);
 
+            _useShowAnimationOnEnable =
+                !skipAnimations &&
+                _isInHierarchyShowed.CurrentValue;
+
+            SetActiveInternal(true);
             return true;
         }
 
@@ -215,14 +218,11 @@ namespace WhiteArrow.ReactiveUI
             _isInHierarchyShowed.Value = true;
             _showInHierarchyState.Value = UIShowState.Showed;
 
-            if (IsAnimationsEnabled && !_skipAnimationsOnce)
+            if (IsAnimationsEnabled && _useShowAnimationOnEnable)
                 _animations.PlayShow();
-            else
-            {
-                _skipAnimationsOnce = false;
-                _showInHierarchyState.Value = UIShowState.AnimationEnded;
-            }
+            else _showInHierarchyState.Value = UIShowState.AnimationEnded;
 
+            _useShowAnimationOnEnable = false;
             RecreateSubscriptions();
             OnShowedCore();
         }
@@ -240,17 +240,12 @@ namespace WhiteArrow.ReactiveUI
                 return false;
             }
 
-            _skipAnimationsOnce = skipAnimations;
             _hideInHierarchyState.Value = UIHideState.Requested;
 
-            if (_isInHierarchyShowed.CurrentValue && IsAnimationsEnabled && !_skipAnimationsOnce)
-            {
+            if (IsAnimationsEnabled && !skipAnimations && _isInHierarchyShowed.CurrentValue)
                 _animations.PlayHide();
-            }
             else
-            {
                 SetActiveInternal(false);
-            }
 
             return true;
         }
@@ -258,7 +253,6 @@ namespace WhiteArrow.ReactiveUI
         private void OnDisable()
         {
             InitIfFalse();
-            _skipAnimationsOnce = false;
 
             if (_defaultFocusOnHide != null && EventSystem.current != null)
                 EventSystem.current.SetSelectedGameObject(_defaultFocusOnHide.gameObject);
