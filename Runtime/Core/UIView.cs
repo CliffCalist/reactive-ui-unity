@@ -98,7 +98,7 @@ namespace WhiteArrow.ReactiveUI
 
             _animations.HideEnded
                 .Where(_ => IsAnimationsEnabled)
-                .Subscribe(_ => _object.SetActive(false))
+                .Subscribe(_ => SetActiveInternal(false))
                 .AddTo(this);
         }
 
@@ -128,7 +128,7 @@ namespace WhiteArrow.ReactiveUI
 
             if (_object.activeInHierarchy)
             {
-                _showInHierarchyState.Value = UIShowState.Showed;
+                _showInHierarchyState.Value = UIShowState.AnimationEnded;
                 _hideInHierarchyState.Value = UIHideState.None;
             }
             else
@@ -187,7 +187,7 @@ namespace WhiteArrow.ReactiveUI
 
 
 
-        #region Show
+        #region Show/Hide
         public bool Show(bool skipAnimations = false)
         {
             InitIfFalse();
@@ -199,7 +199,7 @@ namespace WhiteArrow.ReactiveUI
 
             _skipAnimationsOnce = skipAnimations;
             _showInHierarchyState.Value = UIShowState.Requested;
-            _object.SetActive(true);
+            SetActiveInternal(true);
 
             return true;
         }
@@ -211,7 +211,6 @@ namespace WhiteArrow.ReactiveUI
             if (_defaultFocusOnShow != null && EventSystem.current != null)
                 EventSystem.current.SetSelectedGameObject(_defaultFocusOnShow.gameObject);
 
-            _isSelfShowed.Value = _object.activeSelf;
             _hideInHierarchyState.Value = UIHideState.None;
             _isInHierarchyShowed.Value = true;
             _showInHierarchyState.Value = UIShowState.Showed;
@@ -229,11 +228,9 @@ namespace WhiteArrow.ReactiveUI
         }
 
         protected virtual void OnShowedCore() { }
-        #endregion
 
 
 
-        #region Hide
         public bool Hide(bool skipAnimations = false)
         {
             InitIfFalse();
@@ -252,7 +249,7 @@ namespace WhiteArrow.ReactiveUI
             }
             else
             {
-                _object.SetActive(false);
+                SetActiveInternal(false);
             }
 
             return true;
@@ -266,7 +263,6 @@ namespace WhiteArrow.ReactiveUI
             if (_defaultFocusOnHide != null && EventSystem.current != null)
                 EventSystem.current.SetSelectedGameObject(_defaultFocusOnHide.gameObject);
 
-            _isSelfShowed.Value = _object.activeSelf;
             _showInHierarchyState.Value = UIShowState.None;
             _isInHierarchyShowed.Value = false;
             _hideInHierarchyState.Value = UIHideState.Hided;
@@ -276,6 +272,15 @@ namespace WhiteArrow.ReactiveUI
         }
 
         protected virtual void OnHidedCore() { }
+
+
+
+        private void SetActiveInternal(bool isActive)
+        {
+            _object.SetActive(isActive);
+            _isSelfShowed.Value = _object.activeSelf;
+            _isInHierarchyShowed.Value = _object.activeInHierarchy;
+        }
         #endregion
 
 
