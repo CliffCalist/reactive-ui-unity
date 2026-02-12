@@ -6,7 +6,7 @@ namespace WhiteArrow.ReactiveUI.Core
     public class TransitionConfig
     {
         public TransitionFlow Flow = TransitionFlow.HideThenShow;
-        public TransitionLayerPolicy LayerPolicy = TransitionLayerPolicy.OutgoingOnTop;
+        public TransitionLayerPolicy LayerPolicy = TransitionLayerPolicy.None;
         public bool SkipShowAnimation;
         public bool SkipHideAnimation;
 
