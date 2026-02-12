@@ -2,6 +2,12 @@
 
 ReactiveUI is a lightweight, modular UI framework for Unity, built around reactive programming and a simple lifecycle abstraction. It allows you to cleanly separate UI from game logic, while still enabling fully dynamic behavior.
 
+> ⚠️ **Documentation Notice**
+>
+> This documentation is currently outdated and will be fully updated in an upcoming release.
+>
+> ReactiveUI is in **alpha stage**. The API, architecture, and behavior may change significantly between versions.
+
 ## Features
 
 1. Subscribe-and-react approach instead of imperative control

@@ -1,0 +1,18 @@
+{
+    "name": "WhiteArrowEditor.ReactiveUI.Core",
+    "rootNamespace": "WhiteArrowEditor.ReactiveUI.Core",
+    "references": [
+        "GUID:5afdebce0fe684af084ad57b509d0039"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

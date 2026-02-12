@@ -2,9 +2,9 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using WhiteArrow.ReactiveUI;
+using WhiteArrow.ReactiveUI.Core;
 
-namespace WhiteArrowEditor.ReactiveUI
+namespace WhiteArrowEditor.ReactiveUI.Core
 {
     [CustomEditor(typeof(UIView), true)]
     public class UIViewEditor : Editor
@@ -15,8 +15,8 @@ namespace WhiteArrowEditor.ReactiveUI
         private const float BOX_PADDING = 2;
 
         private const string BTN_HIDE_PROPERTY_PATH = "_btnHide";
-        private const string DEFAULT_FOCUS_ON_SHOW_PROPERTY_PATH = "_defaultFocusOnShow";
-        private const string DEFAULT_FOCUS_ON_HIDE_PROPERTY_PATH = "_defaultFocusOnHide";
+        private const string DEFAULT_FOCUS_ON_SHOW_PROPERTY_PATH = "FocusOnShowed";
+        private const string DEFAULT_FOCUS_ON_HIDE_PROPERTY_PATH = "FocusOnHidden";
 
 
 
