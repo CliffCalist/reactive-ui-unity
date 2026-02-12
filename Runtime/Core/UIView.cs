@@ -281,8 +281,12 @@ namespace WhiteArrow.ReactiveUI.Core
                 _animations.KillCurrentAnimation();
                 _animations.DetachView();
             }
+
             ClearBindings();
+            OnDestroying();
         }
+
+        protected virtual void OnDestroying() { }
         #endregion
     }
 }
