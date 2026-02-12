@@ -1,12 +1,16 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WhiteArrow.ReactiveUI.Core
 {
     public abstract class VisibilityAnimations : MonoBehaviour
     {
-        [SerializeField] private bool _useShowAnimation = true;
-        [SerializeField] private bool _useHideAnimation = true;
+        [FormerlySerializedAs("_useShowAnimation")]
+        public bool UseShowAnimation = true;
+
+        [FormerlySerializedAs("_useHideAnimation")]
+        public bool UseHideAnimation = true;
 
 
 
@@ -49,7 +53,7 @@ namespace WhiteArrow.ReactiveUI.Core
         {
             LogIfViewNotAttached();
 
-            if (_useShowAnimation)
+            if (UseShowAnimation)
                 PlayShowAnimation(onComplete);
             else
             {
@@ -67,7 +71,7 @@ namespace WhiteArrow.ReactiveUI.Core
         {
             LogIfViewNotAttached();
 
-            if (_useHideAnimation)
+            if (UseHideAnimation)
                 PlayHideAnimation(onComplete);
             else
             {
