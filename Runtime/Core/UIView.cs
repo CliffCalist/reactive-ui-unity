@@ -244,6 +244,8 @@ namespace WhiteArrow.ReactiveUI.Core
         #region Binding
         protected void RebindIfVisible()
         {
+            InitIfNeeded();
+
             if (_visibility.IsShowedInHierarchy.CurrentValue)
                 Rebind();
         }
