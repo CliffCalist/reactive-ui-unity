@@ -28,10 +28,16 @@ namespace WhiteArrow.ReactiveUI.Core
                 throw new InvalidOperationException($"The {_view.GetType().Name} is already attached. Use another {nameof(VisibilityAnimations)}.");
 
             _view = view ?? throw new ArgumentNullException(nameof(view));
-            OnViewAttached();
+
+            if (!TryPrepare())
+            {
+                Debug.LogWarning($"The {GetType().Name} is not prepared for work for the {_view.name}. See details in logs.", _view);
+                UseShowAnimation = false;
+                UseHideAnimation = false;
+            }
         }
 
-        protected abstract void OnViewAttached();
+        protected abstract bool TryPrepare();
 
 
 
