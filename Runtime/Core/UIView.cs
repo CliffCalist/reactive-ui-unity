@@ -263,7 +263,7 @@ namespace WhiteArrow.ReactiveUI.Core
 
         protected virtual void CreateBindings(CompositeDisposable bindings) { }
 
-        protected void ClearBindings()
+        public void ClearBindings()
         {
             _bindings?.Dispose();
             _bindings = null;
