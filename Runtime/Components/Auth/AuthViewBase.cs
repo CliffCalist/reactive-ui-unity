@@ -42,9 +42,10 @@ namespace WhiteArrow.ReactiveUI.Components.Auth
 
         private void OnConfirmPressed()
         {
-            if (!IsInputValid())
+            var validationResult = ValidateInput();
+            if (!validationResult.IsValid)
             {
-                ShowError("Input is invalid");
+                ShowError(GetValidationMessage(validationResult));
                 return;
             }
 
@@ -62,9 +63,16 @@ namespace WhiteArrow.ReactiveUI.Components.Auth
             });
         }
 
-        protected abstract bool IsInputValid();
+        protected abstract AuthValidationResult ValidateInput();
 
         protected abstract void PerformAction(Action<AuthOperationResult> callback);
+
+
+
+        protected virtual string GetValidationMessage(AuthValidationResult result)
+        {
+            return AuthInputValidator.GetErrorMessage(result);
+        }
 
 
 

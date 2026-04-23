@@ -12,9 +12,13 @@ namespace WhiteArrow.ReactiveUI.Components.Auth
 
 
 
-        protected override bool IsInputValid()
+        protected override AuthValidationResult ValidateInput()
         {
-            return AuthInputValidator.IsValidPassword(_inputPassword.text, _inputConfirmPassword.text);
+            var passwordValidation = AuthInputValidator.ValidatePassword(_inputPassword.text);
+            if (!passwordValidation.IsValid)
+                return passwordValidation;
+
+            return AuthInputValidator.ValidatePasswordConfirmation(_inputPassword.text, _inputConfirmPassword.text);
         }
 
         protected override sealed void PerformChange(Action<AuthOperationResult> callback)

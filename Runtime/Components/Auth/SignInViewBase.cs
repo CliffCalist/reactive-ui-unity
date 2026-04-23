@@ -11,10 +11,13 @@ namespace WhiteArrow.ReactiveUI.Components.Auth
         [SerializeField] private TMP_InputField _inputPassword;
 
 
-        protected override sealed bool IsInputValid()
+        protected override sealed AuthValidationResult ValidateInput()
         {
-            return AuthInputValidator.IsValidEmail(_inputEmail.text) &&
-                   AuthInputValidator.IsValidPassword(_inputPassword.text);
+            var emailValidation = AuthInputValidator.ValidateEmail(_inputEmail.text);
+            if (!emailValidation.IsValid)
+                return emailValidation;
+
+            return AuthInputValidator.ValidatePassword(_inputPassword.text);
         }
 
         protected override sealed void PerformAction(Action<AuthOperationResult> callback)

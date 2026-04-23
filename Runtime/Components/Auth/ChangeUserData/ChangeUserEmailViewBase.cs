@@ -11,9 +11,9 @@ namespace WhiteArrow.ReactiveUI.Components.Auth
 
 
 
-        protected override sealed bool IsInputValid()
+        protected override sealed AuthValidationResult ValidateInput()
         {
-            return AuthInputValidator.IsValidEmail(_inputEmail.text);
+            return AuthInputValidator.ValidateEmail(_inputEmail.text);
         }
 
         protected override void PerformChange(Action<AuthOperationResult> callback)
