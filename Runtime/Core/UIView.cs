@@ -1,6 +1,5 @@
 using System;
 using R3;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
@@ -33,6 +32,7 @@ namespace WhiteArrow.ReactiveUI.Core
 
 
         private IDisposable _bindings;
+        private IDisposable _hideButtonBinding;
 
 
 
@@ -63,9 +63,24 @@ namespace WhiteArrow.ReactiveUI.Core
             }
         }
 
+        public Button HideButton
+        {
+            get => _btnHide;
+            set
+            {
+                if (_btnHide == value)
+                    return;
+
+                _btnHide = value;
+
+                if (IsInited)
+                    RebindHideButton();
+            }
+        }
 
 
-        #region Initialization
+
+        #region Init&Setup
         private void Awake()
         {
             InitIfNeeded();
@@ -93,26 +108,17 @@ namespace WhiteArrow.ReactiveUI.Core
             if (TryGetComponent(out VisibilityAnimations animations))
                 AttachVisibilityAnimations(animations);
 
-            if (_btnHide != null)
-            {
-                _btnHide.OnClickAsObservable()
-                    .Where(_ => _visibility.IsSelfShowed.CurrentValue)
-                    .Subscribe(_ => Hide())
-                    .AddTo(this);
-            }
-
             Init();
+            RebindHideButton();
 
             IsInited = true;
             IsInitInProgress = false;
         }
 
         protected virtual void Init() { }
-        #endregion
 
 
 
-        #region Animations
         public void AttachVisibilityAnimations(VisibilityAnimations animations)
         {
             InitIfNeeded();
@@ -122,6 +128,19 @@ namespace WhiteArrow.ReactiveUI.Core
 
             _animations = animations;
             _animations.AttachView(this);
+        }
+
+        private void RebindHideButton()
+        {
+            _hideButtonBinding?.Dispose();
+            _hideButtonBinding = null;
+
+            if (_btnHide == null)
+                return;
+
+            _hideButtonBinding = _btnHide.OnClickAsObservable()
+                .Where(_ => _visibility.IsSelfShowed.CurrentValue)
+                .Subscribe(_ => Hide());
         }
         #endregion
 
@@ -285,6 +304,8 @@ namespace WhiteArrow.ReactiveUI.Core
             }
 
             ClearBindings();
+            _hideButtonBinding?.Dispose();
+            _hideButtonBinding = null;
             OnDestroying();
         }
 
